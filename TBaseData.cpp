@@ -27,7 +27,6 @@ bool TBaseData::bTimerSync = false;
 //---------------------------------------------------------------------------
 __fastcall TBaseData::TBaseData(void)
 {
-	VBaseData = NULL;
 	id = -1;
 	bDeleted = false;
 }
@@ -35,7 +34,6 @@ __fastcall TBaseData::TBaseData(void)
 __fastcall TBaseData::TBaseData(const TBaseData &BaseData)
 {
 	id = BaseData.id;
-	VBaseData = BaseData.VBaseData;
 	bDeleted = BaseData.bDeleted;
 }
 //---------------------------------------------------------------------------
@@ -147,7 +145,6 @@ void __fastcall TBaseData::ShowFields(TDescFields **DescFields, int CountFields)
 const TBaseData& __fastcall TBaseData::operator=(const TBaseData &BaseData)
 {
 	id = BaseData.id;
-	VBaseData = BaseData.VBaseData;
 	bDeleted = BaseData.bDeleted;
 
 	return *this;
@@ -302,7 +299,7 @@ int __fastcall TBaseData::GetArrayIndexById(vector <TBaseData*> *VBaseData, int 
 	}
 }
 //---------------------------------------------------------------------------
-int __fastcall TBaseData::GetArrayIndexById(bool bInsert)
+/*int __fastcall TBaseData::GetArrayIndexById(bool bInsert)
 {
 	vector <TBaseData*> vAliasBaseData = *VBaseData;
 
@@ -358,7 +355,7 @@ TBaseData* __fastcall TBaseData::GetObjectById(vector <TBaseData*> *VBaseData, i
 	} else {
 		return (*VBaseData)[index];
 	}
-}
+}*/
 //---------------------------------------------------------------------------
 /*UnicodeString __fastcall TBaseData::FormationInsertString(wchar_t *TableName, TDescFields **DescFields, UnicodeString DbData[], int CountDbFields)
 {
@@ -432,8 +429,59 @@ bool __fastcall TBaseData::ExecOnlySQL(TMyFDQuery *FDQuery, UnicodeString &Query
 	   }
 	}
 }
+
+
 //---------------------------------------------------------------------------
-void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, UnicodeString &QuerySQL, const wchar_t *TableName, TabDB TypeTableDB, TRecordType RecordType, LOGS Logs)
+template <class T>
+void __fastcall TBaseData::ExecSQL_Managed(TMyFDQuery *FDQuery, UnicodeString &QuerySQL, const wchar_t *TableName, TabDB TypeTableDB,
+                                           TRecordType RecordType, LOGS Logs)
+{
+	TimerSyncDisable();
+
+	switch (RecordType) {
+		case TRecordType::RT_INSERT:
+			ShowMessage(L"Insert нельзя использовать через TBaseData");
+			break;
+
+		case TRecordType::RT_UPDATE:
+		{
+			T* found = TObjectManager<T>::FindById(id);
+			if (found)
+				*found = *static_cast<T*>(this);
+			else
+				ShowMessage(L"Не найден объект для обновления по ID");
+			break;
+		}
+
+		case TRecordType::RT_DELETE:
+		{
+			T* found = TObjectManager<T>::FindById(id);
+			if (found)
+				found->bDeleted = true;
+			else
+				ShowMessage(L"Не найден объект для удаления по ID");
+			break;
+		}
+
+		default:
+			break;
+	}
+
+	bool bSuccess = ExecOnlySQL(FDQuery, QuerySQL);
+
+	if (RecordType != TRecordType::RT_UNDEF)
+		TSynchronize::InsertToDb(FDQuery, TypeTableDB, id, RecordType);
+
+	if (Logs != LOGS::LG_UNDEF) {
+		FormShop->CurrentLog->Set(TypeTableDB, Logs, QuerySQL);
+		FormShop->CurrentLog->InsertToDb(FDQuery);
+	}
+
+	TimerSyncRestore();
+}
+
+//---------------------------------------------------------------------------
+/*void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, UnicodeString &QuerySQL, const wchar_t *TableName, TabDB TypeTableDB, TRecordType RecordType, LOGS Logs)
 {
 	vector <TBaseData*> vAliasBaseData = *VBaseData;
 
@@ -470,50 +518,6 @@ void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, UnicodeString &QuerySQL,
 
 	bool bSuccess = ExecOnlySQL(FDQuery, QuerySQL);
 
-/*	bool bSuccess = false;
-	while(!bSuccess) {
-		try {
-			FDQuery->Execute();
-			int idFind;
-
-			switch(RecordType) {
-				case TRecordType::RT_INSERT:
-					ShowMessage(L"Wrond use Insert operation in TbaseData!");
-//					id = FDQuery->InsertId;
-//					VBaseData->push_back(this);
-					break;
-				case TRecordType::RT_UPDATE:
-					idFind = GetArrayIndexById();
-					if(idFind != -1) {
-						(*VBaseData)[idFind] = this;
-					} else {
-						// error
-					}
-					break;
-				case TRecordType::RT_DELETE:
-					idFind = GetArrayIndexById();
-					if(idFind != -1) {
-//						VBaseData->erase(VBaseData->begin() + idFind);
-						(*VBaseData)[idFind]->bDeleted = true;
-					} else {
-						// error
-					}
-					break;
-				default:
-					break;
-			}
-
-			bSuccess = true;
-
-	   } catch (...) {
-			UnicodeString uTmp = uTmp.sprintf(wLostConnection[iLang], wOperationName[RecordType], TableName);
-			if(Application->MessageBox(uTmp.w_str(), uCaptionWarning[iLang], MB_YESNO + MB_ICONQUESTION) == IDNO) {
-				Application->Terminate();
-				exit(1);
-			}
-			bSuccess = false;
-	   }
-	}*/
 	if(RecordType != TRecordType::RT_UNDEF) {
 		TSynchronize::InsertToDb(FDQuery, TypeTableDB, id, RecordType);
 	}
@@ -524,9 +528,46 @@ void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, UnicodeString &QuerySQL,
 	}
 
 	TimerSyncRestore();
-}
+}*/
+
 //---------------------------------------------------------------------------
-void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, TFieldsValues *FieldsValues, int Count, const wchar_t *TableName, wchar_t *AutoIncrement, TabDB TypeTableDB)
+template <class T>
+void __fastcall TBaseData::ExecSQL_Managed(TMyFDQuery *FDQuery, TFieldsValues *FieldsValues,
+                                              int Count, const wchar_t *TableName,
+                                              wchar_t *AutoIncrement, TabDB TypeTableDB)
+{
+	TimerSyncDisable();
+
+	bool bSuccess = false;
+	while (!bSuccess) {
+		try {
+			id = FDQuery->MyInsert(TableName, AutoIncrement, FieldsValues, Count);
+
+			// добавляем объект в менеджер
+			TObjectManager<T>::Add(static_cast<T*>(this));
+
+			bSuccess = true;
+
+		} catch (...) {
+			uTmp = uTmp.sprintf(wLostConnection[iLang], wOperationName[TRecordType::RT_INSERT], TableName);
+			if (Application->MessageBox(uTmp.w_str(), uCaptionWarning[iLang], MB_YESNO + MB_ICONQUESTION) == IDNO) {
+				Application->Terminate();
+				exit(1);
+			}
+			bSuccess = false;
+		}
+	}
+
+	TSynchronize::InsertToDb(FDQuery, TypeTableDB, id, TRecordType::RT_INSERT);
+
+	FormShop->CurrentLog->Set(TypeTableDB, LOGS::LG_INSERT, FDQuery->SQL->Text);
+	FormShop->CurrentLog->InsertToDb(FDQuery);
+
+	TimerSyncRestore();
+}
+
+//---------------------------------------------------------------------------
+/*void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, TFieldsValues *FieldsValues, int Count, const wchar_t *TableName, wchar_t *AutoIncrement, TabDB TypeTableDB)
 {
 	TimerSyncDisable();
 
@@ -539,7 +580,7 @@ void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, TFieldsValues *FieldsVal
 			bSuccess = true;
 
 	   } catch (...) {
-			UnicodeString uTmp = uTmp.sprintf(wLostConnection[iLang], wOperationName[TRecordType::RT_INSERT], TableName);
+			uTmp = uTmp.sprintf(wLostConnection[iLang], wOperationName[TRecordType::RT_INSERT], TableName);
 			if(Application->MessageBox(uTmp.w_str(), uCaptionWarning[iLang], MB_YESNO + MB_ICONQUESTION) == IDNO) {
 				Application->Terminate();
 				exit(1);
@@ -554,7 +595,7 @@ void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, TFieldsValues *FieldsVal
 	FormShop->CurrentLog->InsertToDb(FDQuery);
 
 	TimerSyncRestore();
-}
+} */
 //---------------------------------------------------------------------------
 bool __fastcall TBaseData::LoadRecord(TMyFDQuery *FDQuery, const wchar_t *TableName, TDescFields **DescFields, UnicodeString DbData[], int CountDbFields)
 {
@@ -578,7 +619,7 @@ bool __fastcall TBaseData::LoadRecord(TMyFDQuery *FDQuery, const wchar_t *TableN
 			}
 			bSuccess = true;
 	   } catch (...) {
-			UnicodeString uTmp = uTmp.sprintf(wLostConnection[iLang], L"Select", TableName);
+			uTmp = uTmp.sprintf(wLostConnection[iLang], L"Select", TableName);
 			if(Application->MessageBox(uTmp.w_str(), uCaptionWarning[iLang], MB_YESNO + MB_ICONQUESTION) == IDNO) {
 				Application->Terminate();
 				exit(1);
@@ -588,8 +629,63 @@ bool __fastcall TBaseData::LoadRecord(TMyFDQuery *FDQuery, const wchar_t *TableN
 	}
 	return true;
 }
+
 //---------------------------------------------------------------------------
-bool __fastcall TBaseData::ApplyBaseSyncronize(TMyFDQuery *FDQuery, TSynchronize *SyncData, TFormParent *FormParent)
+template <class T>
+bool __fastcall TBaseData::ApplyBaseSyncronize_Managed(TMyFDQuery *FDQuery, TSynchronize *SyncData, TFormParent *FormParent)
+{
+	bool bCreateObject = false;
+	id = SyncData->idRecord;
+
+	switch (SyncData->RecordType)
+	{
+		case TRecordType::RT_INSERT:
+		{
+			if (LoadRecordId(FDQuery)) {
+				TObjectManager<T>::Add(static_cast<T*>(this));
+				bCreateObject = true;
+			}
+			break;
+		}
+
+		case TRecordType::RT_UPDATE:
+		{
+			T* existing = TObjectManager<T>::FindById(id);
+			if (existing) {
+				if (LoadRecordId(FDQuery)) {
+					*existing = *static_cast<T*>(this);
+					bCreateObject = true;
+				}
+			}
+			break;
+		}
+
+		case TRecordType::RT_DELETE:
+		{
+			T* existing = TObjectManager<T>::FindById(id);
+			if (existing) {
+				TObjectManager<T>::DeleteAndFree(existing);
+			}
+			break;
+		}
+
+		default:
+			break;
+	}
+
+	// Обновление визуального интерфейса
+	if (FormParent != NULL) {
+		FormParent->bListUpdate = true;
+		if (FormParent->Showing) {
+			FormParent->MyListView->FillList();
+		}
+	}
+
+	return bCreateObject;
+}
+
+//---------------------------------------------------------------------------
+/*bool __fastcall TBaseData::ApplyBaseSyncronize(TMyFDQuery *FDQuery, TSynchronize *SyncData, TFormParent *FormParent)
 {
 	bool bCreateObject = false;
 	int indVec;
@@ -639,9 +735,48 @@ bool __fastcall TBaseData::ApplyBaseSyncronize(TMyFDQuery *FDQuery, TSynchronize
 	}
 
 	return bCreateObject;
-}
+}*/
+
 //---------------------------------------------------------------------------
-void __fastcall TBaseData::CorrectVector(int index)
+void __fastcall TBaseData::CorrectVector()
+{
+	if (dynamic_cast<TBuyer*>(this)) {
+		TypeTable = TabDB::TB_BUYER;
+	}
+	else if (dynamic_cast<TProduct*>(this)) {
+		TypeTable = TabDB::TB_PROD;
+	}
+	else if (dynamic_cast<TProvisioner*>(this)) {
+		TypeTable = TabDB::TB_PROVIS;
+	}
+	else if (dynamic_cast<TSelectProduct*>(this)) {
+		TypeTable = TabDB::TB_SELECTP;
+
+		TSelectProduct* selProd = static_cast<TSelectProduct*>(this);
+
+		// Найдём MoveProduct по idMove
+		TMoveProduct* move = TObjectManager<TMoveProduct>::FindById(selProd->idMove);
+		if (move) {
+			auto& vec = move->VSelectedProd;
+			for (auto it = vec.begin(); it != vec.end(); ++it) {
+				if ((*it)->id == this->id) {
+					vec.erase(it);
+					break;
+				}
+			}
+		}
+	}
+	else if (dynamic_cast<TMoveProduct*>(this)) {
+		TypeTable = TabDB::TB_MOVEP;
+	}
+	else {
+		TypeTable = TabDB::TB_UNDEF;
+	}
+}
+
+
+//---------------------------------------------------------------------------
+/*void __fastcall TBaseData::CorrectVector(int index)
 {
 	if(dynamic_cast<TBuyer *>(this)) {
 		TypeTable = TabDB::TB_BUYER;
@@ -667,14 +802,35 @@ void __fastcall TBaseData::CorrectVector(int index)
 	} else {
 		TypeTable = TabDB::TB_UNDEF;
 	}
-}
+} */
 
 //---------------------------------------------------------------------------
-bool __fastcall TBaseData::CheckSortById(void)
+template <class T>
+bool __fastcall TBaseData::CheckSortById_Managed(const wchar_t* typeName)
+{
+	auto& list = TObjectManager<T>::GetList();
+
+	for (size_t i = 1; i < list.size(); ++i)
+	{
+		if (list[i]->id <= list[i - 1]->id)
+		{
+			UnicodeString msg;
+			msg = msg.sprintf(L"Нарушен порядок сортировки для объектов %s", typeName);
+			Application->MessageBox(msg.w_str(), L"Ошибка", MB_OK);
+			return false;
+		}
+	}
+
+	return true;
+}
+
+
+//---------------------------------------------------------------------------
+/*bool __fastcall TBaseData::CheckSortById(void)
 {
 	return true;
 
-	UnicodeString uTmp = L"Unknow object";
+	uTmp = L"Unknow object";
 
 	int size = VBaseData->size();
 
@@ -706,7 +862,7 @@ bool __fastcall TBaseData::CheckSortById(void)
 	}
 
 	return true;
-}
+}*/
 //---------------------------------------------------------------------------
 
 

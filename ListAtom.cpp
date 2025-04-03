@@ -5,6 +5,7 @@
 #include "MoveProduct.h"
 #include "UnitMoveProduct.h"
 #include "Shop.h"
+#include "SelectProduct.h"
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)

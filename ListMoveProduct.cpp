@@ -4,6 +4,7 @@
 #include "MyListView.h"
 #include "Shop.h"
 #include "UnitMoveProduct.h"
+#include "ObjectManager.h"
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -29,61 +30,61 @@ void __fastcall TMyListView::FillListMoveProduct(void)
 							   FormShop->CheckBoxRetDebt,	FormShop->CheckBoxExpenses,
 							   FormShop->CheckBoxDebtProvis};
 
-	for(int i=0; i < (int)TMoveProduct::VMoveProduct.size(); i++) {
+	for(unsigned i=0; i < TObjectManager<TMoveProduct>::GetList().size(); i++) {
 
-		bool bCond = (TMoveProduct::VMoveProduct[i]->DateTime > FormShop->DateTimePicker1->DateTime)
-				  && (TMoveProduct::VMoveProduct[i]->DateTime < FormShop->DateTimePicker2->DateTime)
-				  && CheckBoxes[TMoveProduct::VMoveProduct[i]->MoveType]->Checked
-				  && (FormShop->CheckBoxDeleted->Checked || !TMoveProduct::VMoveProduct[i]->bDeleted)
-				  && (TMoveProduct::VMoveProduct[i]->SourceUnit == FormShop->ShopUnit || TMoveProduct::VMoveProduct[i]->TargetUnit == FormShop->ShopUnit);
+		bool bCond = (TObjectManager<TMoveProduct>::GetList()[i]->DateTime > FormShop->DateTimePicker1->DateTime)
+				  && (TObjectManager<TMoveProduct>::GetList()[i]->DateTime < FormShop->DateTimePicker2->DateTime)
+				  && CheckBoxes[TObjectManager<TMoveProduct>::GetList()[i]->MoveType]->Checked
+				  && (FormShop->CheckBoxDeleted->Checked || !TObjectManager<TMoveProduct>::GetList()[i]->bDeleted)
+				  && (TObjectManager<TMoveProduct>::GetList()[i]->SourceUnit == FormShop->ShopUnit || TObjectManager<TMoveProduct>::GetList()[i]->TargetUnit == FormShop->ShopUnit);
 
 		if(bCond) {
 			if(FormShop->EditSearchName->Text.Length() > 0) {
-				bCond = bCond && ((TMoveProduct::VMoveProduct[i]->TargetPerson->SumName.UpperCase().Pos(FormShop->EditSearchName->Text.UpperCase()) > 0)
-								||(TMoveProduct::VMoveProduct[i]->SourcePerson->SumName.UpperCase().Pos(FormShop->EditSearchName->Text.UpperCase()) > 0));
+				bCond = bCond && ((TObjectManager<TMoveProduct>::GetList()[i]->TargetPerson->SumName.UpperCase().Pos(FormShop->EditSearchName->Text.UpperCase()) > 0)
+								||(TObjectManager<TMoveProduct>::GetList()[i]->SourcePerson->SumName.UpperCase().Pos(FormShop->EditSearchName->Text.UpperCase()) > 0));
 			}
 
 			if(FormShop->EditSearchProd->Text.Length() > 0) {
-				bCond = bCond && TMoveProduct::VMoveProduct[i]->IsContainProduct(FormShop->EditSearchProd->Text.UpperCase());
+				bCond = bCond && TObjectManager<TMoveProduct>::GetList()[i]->IsContainProduct(FormShop->EditSearchProd->Text.UpperCase());
 			}
 
 			if(FormShop->EditSearchCashNumb->Text.Length() > 0) {
-				bCond = bCond && (TMoveProduct::VMoveProduct[i]->id == FormShop->EditSearchCashNumb->Text.ToInt());
+				bCond = bCond && (TObjectManager<TMoveProduct>::GetList()[i]->id == FormShop->EditSearchCashNumb->Text.ToInt());
 			}
 		}
 
 		if(bCond) {
 			ListItem = Items->Add();
-			if(TMoveProduct::VMoveProduct[i]->bDeleted) {
+			if(TObjectManager<TMoveProduct>::GetList()[i]->bDeleted) {
 				ListItem->Data = Pointer(ColorLV[7]);
 			} else {
-				ListItem->Data = Pointer(ColorLV[TMoveProduct::VMoveProduct[i]->MoveType]);
+				ListItem->Data = Pointer(ColorLV[TObjectManager<TMoveProduct>::GetList()[i]->MoveType]);
 			}
 
-			ListItem->Caption = TMoveProduct::VMoveProduct[i]->DateTime.FormatString(wDateTimeFormat);
+			ListItem->Caption = TObjectManager<TMoveProduct>::GetList()[i]->DateTime.FormatString(wDateTimeFormat);
 
-			if(TMoveProduct::VMoveProduct[i]->MoveType == TMoveType::MOV_OUT) {
+			if(TObjectManager<TMoveProduct>::GetList()[i]->MoveType == TMoveType::MOV_OUT) {
 
-				if(TMoveProduct::VMoveProduct[i]->SourceUnit == FormShop->ShopUnit) {
+				if(TObjectManager<TMoveProduct>::GetList()[i]->SourceUnit == FormShop->ShopUnit) {
 					ListItem->ImageIndex = TMoveType::MOV_OUT;
 				} else {
 					ListItem->ImageIndex = TMoveType::MOV_INC;
 				}
 
 			} else {
-				ListItem->ImageIndex = TMoveProduct::VMoveProduct[i]->MoveType;
+				ListItem->ImageIndex = TObjectManager<TMoveProduct>::GetList()[i]->MoveType;
 			}
-			AddSubItem(ListItem, FloatToStrF(TMoveProduct::VMoveProduct[i]->id, ffNumber, 20, 0), ColumnsData[1].Visible);
-			AddSubItem(ListItem, TMoveProduct::VMoveProduct[i]->SourceUnit->Name, ColumnsData[2].Visible);
-			AddSubItem(ListItem, TMoveProduct::VMoveProduct[i]->SourcePerson->SumName, ColumnsData[3].Visible);
-			AddSubItem(ListItem, TMoveProduct::VMoveProduct[i]->TargetUnit->Name, ColumnsData[4].Visible);
-			AddSubItem(ListItem, TMoveProduct::VMoveProduct[i]->TargetPerson->SumName, ColumnsData[5].Visible);
-			AddSubItem(ListItem, TMoveProduct::VMoveProduct[i]->TotalCostPrice.StringFormat(), ColumnsData[6].Visible);
-			AddSubItem(ListItem, TMoveProduct::VMoveProduct[i]->TotalPrice.StringFormat(), ColumnsData[7].Visible);
-			AddSubItem(ListItem, TMoveProduct::VMoveProduct[i]->Discount.StringFormat(), ColumnsData[8].Visible);
-			AddSubItem(ListItem, TMoveProduct::VMoveProduct[i]->TotalPayment.StringFormat(), ColumnsData[9].Visible);
-			AddSubItem(ListItem, TMoveProduct::VMoveProduct[i]->ActualPayment.StringFormat(), ColumnsData[10].Visible);
-			AddSubItem(ListItem, TMoveProduct::VMoveProduct[i]->Debt.StringFormat(), ColumnsData[11].Visible);
+			AddSubItem(ListItem, FloatToStrF(TObjectManager<TMoveProduct>::GetList()[i]->id, ffNumber, 20, 0), ColumnsData[1].Visible);
+			AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[i]->SourceUnit->Name, ColumnsData[2].Visible);
+			AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[i]->SourcePerson->SumName, ColumnsData[3].Visible);
+			AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[i]->TargetUnit->Name, ColumnsData[4].Visible);
+			AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[i]->TargetPerson->SumName, ColumnsData[5].Visible);
+			AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[i]->TotalCostPrice.StringFormat(), ColumnsData[6].Visible);
+			AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[i]->TotalPrice.StringFormat(), ColumnsData[7].Visible);
+			AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[i]->Discount.StringFormat(), ColumnsData[8].Visible);
+			AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[i]->TotalPayment.StringFormat(), ColumnsData[9].Visible);
+			AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[i]->ActualPayment.StringFormat(), ColumnsData[10].Visible);
+			AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[i]->Debt.StringFormat(), ColumnsData[11].Visible);
 
 			ipp.push_back(i);
 		}
@@ -100,35 +101,35 @@ void __fastcall TMyListView::FillArangeListMoveProduct(void)
 
 		ListItem = Items->Add();
 
-		ListItem->Caption = TMoveProduct::VMoveProduct[ii]->DateTime.FormatString(wDateTimeFormat);
+		ListItem->Caption = TObjectManager<TMoveProduct>::GetList()[ii]->DateTime.FormatString(wDateTimeFormat);
 
-		if(TMoveProduct::VMoveProduct[ii]->MoveType == TMoveType::MOV_OUT) {
-			if(TMoveProduct::VMoveProduct[ii]->SourceUnit == FormShop->ShopUnit) {
+		if(TObjectManager<TMoveProduct>::GetList()[ii]->MoveType == TMoveType::MOV_OUT) {
+			if(TObjectManager<TMoveProduct>::GetList()[ii]->SourceUnit == FormShop->ShopUnit) {
 				ListItem->ImageIndex = TMoveType::MOV_OUT;
 			} else {
 				ListItem->ImageIndex = TMoveType::MOV_INC;
 			}
 		} else {
-			ListItem->ImageIndex = TMoveProduct::VMoveProduct[ii]->MoveType;
+			ListItem->ImageIndex = TObjectManager<TMoveProduct>::GetList()[ii]->MoveType;
 		}
 
-		if(TMoveProduct::VMoveProduct[ii]->bDeleted) {
+		if(TObjectManager<TMoveProduct>::GetList()[ii]->bDeleted) {
 			ListItem->Data = Pointer(ColorLV[7]);
 		} else {
-			ListItem->Data = Pointer(ColorLV[TMoveProduct::VMoveProduct[ii]->MoveType]);
+			ListItem->Data = Pointer(ColorLV[TObjectManager<TMoveProduct>::GetList()[ii]->MoveType]);
 		}
 
-		AddSubItem(ListItem, FloatToStrF(TMoveProduct::VMoveProduct[ii]->id, ffNumber, 20, 0), ColumnsData[1].Visible);
-		AddSubItem(ListItem, TMoveProduct::VMoveProduct[ii]->SourceUnit->Name, ColumnsData[2].Visible);
-		AddSubItem(ListItem, TMoveProduct::VMoveProduct[ii]->SourcePerson->SumName, ColumnsData[3].Visible);
-		AddSubItem(ListItem, TMoveProduct::VMoveProduct[ii]->TargetUnit->Name, ColumnsData[4].Visible);
-		AddSubItem(ListItem, TMoveProduct::VMoveProduct[ii]->TargetPerson->SumName, ColumnsData[5].Visible);
-		AddSubItem(ListItem, TMoveProduct::VMoveProduct[ii]->TotalCostPrice.StringFormat(), ColumnsData[6].Visible);
-		AddSubItem(ListItem, TMoveProduct::VMoveProduct[ii]->TotalPrice.StringFormat(), ColumnsData[7].Visible);
-		AddSubItem(ListItem, TMoveProduct::VMoveProduct[ii]->Discount.StringFormat(), ColumnsData[8].Visible);
-		AddSubItem(ListItem, TMoveProduct::VMoveProduct[ii]->TotalPayment.StringFormat(), ColumnsData[9].Visible);
-		AddSubItem(ListItem, TMoveProduct::VMoveProduct[ii]->ActualPayment.StringFormat(), ColumnsData[10].Visible);
-		AddSubItem(ListItem, TMoveProduct::VMoveProduct[ii]->Debt.StringFormat(), ColumnsData[11].Visible);
+		AddSubItem(ListItem, FloatToStrF(TObjectManager<TMoveProduct>::GetList()[ii]->id, ffNumber, 20, 0), ColumnsData[1].Visible);
+		AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[ii]->SourceUnit->Name, ColumnsData[2].Visible);
+		AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[ii]->SourcePerson->SumName, ColumnsData[3].Visible);
+		AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[ii]->TargetUnit->Name, ColumnsData[4].Visible);
+		AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[ii]->TargetPerson->SumName, ColumnsData[5].Visible);
+		AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[ii]->TotalCostPrice.StringFormat(), ColumnsData[6].Visible);
+		AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[ii]->TotalPrice.StringFormat(), ColumnsData[7].Visible);
+		AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[ii]->Discount.StringFormat(), ColumnsData[8].Visible);
+		AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[ii]->TotalPayment.StringFormat(), ColumnsData[9].Visible);
+		AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[ii]->ActualPayment.StringFormat(), ColumnsData[10].Visible);
+		AddSubItem(ListItem, TObjectManager<TMoveProduct>::GetList()[ii]->Debt.StringFormat(), ColumnsData[11].Visible);
 	}
 }
 //---------------------------------------------------------------------------
@@ -144,40 +145,40 @@ void __fastcall TMyListView::SortMoveProduct(int iColumn)
 
 			switch(iIndexColumnData) {
 				case 0:
-					bSwap = TMoveProduct::VMoveProduct[ipp[i]]->DateTime < TMoveProduct::VMoveProduct[ipp[j]]->DateTime;
+					bSwap = TObjectManager<TMoveProduct>::GetList()[ipp[i]]->DateTime < TObjectManager<TMoveProduct>::GetList()[ipp[j]]->DateTime;
 					break;
 				case 1:
-					bSwap = TMoveProduct::VMoveProduct[ipp[i]]->id < TMoveProduct::VMoveProduct[ipp[j]]->id;
+					bSwap = TObjectManager<TMoveProduct>::GetList()[ipp[i]]->id < TObjectManager<TMoveProduct>::GetList()[ipp[j]]->id;
 					break;
 				case 2:
-					bSwap = TMoveProduct::VMoveProduct[ipp[i]]->SourceUnit->Name < TMoveProduct::VMoveProduct[ipp[j]]->SourceUnit->Name;
+					bSwap = TObjectManager<TMoveProduct>::GetList()[ipp[i]]->SourceUnit->Name < TObjectManager<TMoveProduct>::GetList()[ipp[j]]->SourceUnit->Name;
 					break;
 				case 3:
-					bSwap = TMoveProduct::VMoveProduct[ipp[i]]->SourcePerson->SumName < TMoveProduct::VMoveProduct[ipp[j]]->SourcePerson->SumName;
+					bSwap = TObjectManager<TMoveProduct>::GetList()[ipp[i]]->SourcePerson->SumName < TObjectManager<TMoveProduct>::GetList()[ipp[j]]->SourcePerson->SumName;
 					break;
 				case 4:
-					bSwap = TMoveProduct::VMoveProduct[ipp[i]]->TargetUnit->Name < TMoveProduct::VMoveProduct[ipp[j]]->TargetUnit->Name;
+					bSwap = TObjectManager<TMoveProduct>::GetList()[ipp[i]]->TargetUnit->Name < TObjectManager<TMoveProduct>::GetList()[ipp[j]]->TargetUnit->Name;
 					break;
 				case 5:
-					bSwap = TMoveProduct::VMoveProduct[ipp[i]]->TargetPerson->SumName < TMoveProduct::VMoveProduct[ipp[j]]->TargetPerson->SumName;
+					bSwap = TObjectManager<TMoveProduct>::GetList()[ipp[i]]->TargetPerson->SumName < TObjectManager<TMoveProduct>::GetList()[ipp[j]]->TargetPerson->SumName;
 					break;
 				case 6:
-					bSwap = TMoveProduct::VMoveProduct[ipp[i]]->TotalCostPrice.GetValue() < TMoveProduct::VMoveProduct[ipp[j]]->TotalCostPrice.GetValue();
+					bSwap = TObjectManager<TMoveProduct>::GetList()[ipp[i]]->TotalCostPrice.GetValue() < TObjectManager<TMoveProduct>::GetList()[ipp[j]]->TotalCostPrice.GetValue();
 					break;
 				case 7:
-					bSwap = TMoveProduct::VMoveProduct[ipp[i]]->TotalPrice.GetValue() < TMoveProduct::VMoveProduct[ipp[j]]->TotalPrice.GetValue();
+					bSwap = TObjectManager<TMoveProduct>::GetList()[ipp[i]]->TotalPrice.GetValue() < TObjectManager<TMoveProduct>::GetList()[ipp[j]]->TotalPrice.GetValue();
 					break;
 				case 8:
-					bSwap = TMoveProduct::VMoveProduct[ipp[i]]->Discount.GetValue() < TMoveProduct::VMoveProduct[ipp[j]]->Discount.GetValue();
+					bSwap = TObjectManager<TMoveProduct>::GetList()[ipp[i]]->Discount.GetValue() < TObjectManager<TMoveProduct>::GetList()[ipp[j]]->Discount.GetValue();
 					break;
 				case 9:
-					bSwap = TMoveProduct::VMoveProduct[ipp[i]]->TotalPayment.GetValue() < TMoveProduct::VMoveProduct[ipp[j]]->TotalPayment.GetValue();
+					bSwap = TObjectManager<TMoveProduct>::GetList()[ipp[i]]->TotalPayment.GetValue() < TObjectManager<TMoveProduct>::GetList()[ipp[j]]->TotalPayment.GetValue();
 					break;
 				case 10:
-					bSwap = TMoveProduct::VMoveProduct[ipp[i]]->ActualPayment.GetValue() < TMoveProduct::VMoveProduct[ipp[j]]->ActualPayment.GetValue();
+					bSwap = TObjectManager<TMoveProduct>::GetList()[ipp[i]]->ActualPayment.GetValue() < TObjectManager<TMoveProduct>::GetList()[ipp[j]]->ActualPayment.GetValue();
 					break;
 				case 11:
-					bSwap = TMoveProduct::VMoveProduct[ipp[i]]->Debt.GetValue() < TMoveProduct::VMoveProduct[ipp[j]]->Debt.GetValue();
+					bSwap = TObjectManager<TMoveProduct>::GetList()[ipp[i]]->Debt.GetValue() < TObjectManager<TMoveProduct>::GetList()[ipp[j]]->Debt.GetValue();
 					break;
 			}
 			if(bArrangeOrder[iIndexColumnData]) {
@@ -197,12 +198,12 @@ void __fastcall TMyListView::MoveProductClick(int iIndex)
 		FormShop->AtomList->FillList();
 //		UnicodeString uTmp;
 //		ShowMessage(uTmp.sprintf(L"iIndex = %d ipp[iIndex] = %d", iIndex, ipp[iIndex]));
-		FormShop->FillPersonsData(TMoveProduct::VMoveProduct[ipp[iIndex]]);
+		FormShop->FillPersonsData(TObjectManager<TMoveProduct>::GetList()[ipp[iIndex]]);
 	}
 }
 
 //---------------------------------------------------------------------------
 TMoveProduct* __fastcall TMyListView::GetSelectMoveProduct(void)
 {
-	return TMoveProduct::VMoveProduct[ipp[ItemIndex]];
+	return TObjectManager<TMoveProduct>::GetList()[ipp[ItemIndex]];
 }

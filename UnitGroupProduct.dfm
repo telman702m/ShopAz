@@ -3,8 +3,8 @@ object FormGroupProduct: TFormGroupProduct
   Top = 0
   BorderStyle = bsDialog
   Caption = #1061#1072#1088#1072#1082#1090#1077#1088#1080#1089#1090#1080#1082#1080' '#1075#1088#1091#1087#1087#1099' '#1090#1086#1074#1072#1088#1086#1074
-  ClientHeight = 337
-  ClientWidth = 557
+  ClientHeight = 336
+  ClientWidth = 553
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

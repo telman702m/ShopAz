@@ -5,6 +5,7 @@
 #include "Provisioner.h"
 #include "UnitProvisionerList.h"
 #include "UnitProvisionerData.h"
+#include "ObjectManager.h"
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -15,36 +16,36 @@ void __fastcall TMyListView::FillListProvisioner(void)
 	TListItem  *ListItem;
 	UnicodeString uTmp;
 
-	for(int i=0; i < (int)TProvisioner::VProvisioners.size(); i++) {
+	for(unsigned i=0; i < TObjectManager<TProvisioner>::GetList().size(); i++) {
 
 		bool bCond = true;
 
 		if(FormProvisionerList->EditFindName->Text.Length() > 0) {
-			bCond = (bCond && (TProvisioner::VProvisioners[i]->Surname.UpperCase().Pos(FormProvisionerList->EditFindName->Text.UpperCase()) ||
-							   TProvisioner::VProvisioners[i]->Name.UpperCase().Pos(FormProvisionerList->EditFindName->Text.UpperCase()) ||
-							   TProvisioner::VProvisioners[i]->Patronymic.UpperCase().Pos(FormProvisionerList->EditFindName->Text.UpperCase())) > 0);
+			bCond = (bCond && (TObjectManager<TProvisioner>::GetList()[i]->Surname.UpperCase().Pos(FormProvisionerList->EditFindName->Text.UpperCase()) ||
+							   TObjectManager<TProvisioner>::GetList()[i]->Name.UpperCase().Pos(FormProvisionerList->EditFindName->Text.UpperCase()) ||
+							   TObjectManager<TProvisioner>::GetList()[i]->Patronymic.UpperCase().Pos(FormProvisionerList->EditFindName->Text.UpperCase())) > 0);
 		}
 		if(FormProvisionerList->EditFindAttributs->Text.Length() > 0) {
-			bCond = (bCond && (TProvisioner::VProvisioners[i]->Organization.UpperCase().Pos(FormProvisionerList->EditFindAttributs->Text.UpperCase()) ||
-							   TProvisioner::VProvisioners[i]->Address.UpperCase().Pos(FormProvisionerList->EditFindAttributs->Text.UpperCase()) ||
-							   TProvisioner::VProvisioners[i]->Phone1.UpperCase().Pos(FormProvisionerList->EditFindAttributs->Text.UpperCase()) ||
-							   TProvisioner::VProvisioners[i]->Phone2.UpperCase().Pos(FormProvisionerList->EditFindAttributs->Text.UpperCase())) > 0);
+			bCond = (bCond && (TObjectManager<TProvisioner>::GetList()[i]->Organization.UpperCase().Pos(FormProvisionerList->EditFindAttributs->Text.UpperCase()) ||
+							   TObjectManager<TProvisioner>::GetList()[i]->Address.UpperCase().Pos(FormProvisionerList->EditFindAttributs->Text.UpperCase()) ||
+							   TObjectManager<TProvisioner>::GetList()[i]->Phone1.UpperCase().Pos(FormProvisionerList->EditFindAttributs->Text.UpperCase()) ||
+							   TObjectManager<TProvisioner>::GetList()[i]->Phone2.UpperCase().Pos(FormProvisionerList->EditFindAttributs->Text.UpperCase())) > 0);
 		}
 
 		if(bCond) {
 			ListItem = Items->Add();
-			ListItem->Caption = TProvisioner::VProvisioners[i]->Surname;
+			ListItem->Caption = TObjectManager<TProvisioner>::GetList()[i]->Surname;
 			ListItem->ImageIndex = -1;
 
-			AddSubItem(ListItem, TProvisioner::VProvisioners[i]->Name, ColumnsData[1].Visible);
-			AddSubItem(ListItem, TProvisioner::VProvisioners[i]->Patronymic, ColumnsData[2].Visible);
-			AddSubItem(ListItem, TProvisioner::VProvisioners[i]->Organization, ColumnsData[3].Visible);
-			AddSubItem(ListItem, TProvisioner::VProvisioners[i]->Address, ColumnsData[4].Visible);
-			AddSubItem(ListItem, TProvisioner::VProvisioners[i]->Phone1, ColumnsData[5].Visible);
-			AddSubItem(ListItem, TProvisioner::VProvisioners[i]->Phone2, ColumnsData[6].Visible);
-			AddSubItem(ListItem, TProvisioner::VProvisioners[i]->TotalShoped.StringFormat(), ColumnsData[7].Visible);
-			AddSubItem(ListItem, TProvisioner::VProvisioners[i]->TotalDiscount.StringFormat(), ColumnsData[8].Visible);
-			AddSubItem(ListItem, TProvisioner::VProvisioners[i]->TotalDebt.StringFormat(), ColumnsData[9].Visible);
+			AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[i]->Name, ColumnsData[1].Visible);
+			AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[i]->Patronymic, ColumnsData[2].Visible);
+			AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[i]->Organization, ColumnsData[3].Visible);
+			AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[i]->Address, ColumnsData[4].Visible);
+			AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[i]->Phone1, ColumnsData[5].Visible);
+			AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[i]->Phone2, ColumnsData[6].Visible);
+			AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[i]->TotalShoped.StringFormat(), ColumnsData[7].Visible);
+			AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[i]->TotalDiscount.StringFormat(), ColumnsData[8].Visible);
+			AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[i]->TotalDebt.StringFormat(), ColumnsData[9].Visible);
 
 			ipp.push_back(i);
 		}
@@ -60,18 +61,18 @@ void __fastcall TMyListView::FillArangedListProvisioner(void)
 	for(int i=0; i<(int)ipp.size(); i++) {
 		int ii = ipp[i];
 		ListItem = Items->Add();
-		ListItem->Caption = TProvisioner::VProvisioners[ii]->Surname;
+		ListItem->Caption = TObjectManager<TProvisioner>::GetList()[ii]->Surname;
 		ListItem->ImageIndex = -1;
 
-		AddSubItem(ListItem, TProvisioner::VProvisioners[ii]->Name, ColumnsData[1].Visible);
-		AddSubItem(ListItem, TProvisioner::VProvisioners[ii]->Patronymic, ColumnsData[2].Visible);
-		AddSubItem(ListItem, TProvisioner::VProvisioners[ii]->Organization, ColumnsData[3].Visible);
-		AddSubItem(ListItem, TProvisioner::VProvisioners[ii]->Address, ColumnsData[4].Visible);
-		AddSubItem(ListItem, TProvisioner::VProvisioners[ii]->Phone1, ColumnsData[5].Visible);
-		AddSubItem(ListItem, TProvisioner::VProvisioners[ii]->Phone2, ColumnsData[6].Visible);
-		AddSubItem(ListItem, TProvisioner::VProvisioners[ii]->TotalShoped.StringFormat(), ColumnsData[7].Visible);
-		AddSubItem(ListItem, TProvisioner::VProvisioners[ii]->TotalDiscount.StringFormat(), ColumnsData[8].Visible);
-		AddSubItem(ListItem, TProvisioner::VProvisioners[ii]->TotalDebt.StringFormat(), ColumnsData[9].Visible);
+		AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[ii]->Name, ColumnsData[1].Visible);
+		AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[ii]->Patronymic, ColumnsData[2].Visible);
+		AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[ii]->Organization, ColumnsData[3].Visible);
+		AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[ii]->Address, ColumnsData[4].Visible);
+		AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[ii]->Phone1, ColumnsData[5].Visible);
+		AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[ii]->Phone2, ColumnsData[6].Visible);
+		AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[ii]->TotalShoped.StringFormat(), ColumnsData[7].Visible);
+		AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[ii]->TotalDiscount.StringFormat(), ColumnsData[8].Visible);
+		AddSubItem(ListItem, TObjectManager<TProvisioner>::GetList()[ii]->TotalDebt.StringFormat(), ColumnsData[9].Visible);
 	}
 }
 
@@ -87,34 +88,34 @@ void __fastcall TMyListView::SortProvisioners(int iColumn)
 		for(unsigned j=i+1; j < ipp.size(); j++) {
 			switch(iIndexColumnData) {
 				case 0:
-					bSwap = TProvisioner::VProvisioners[ipp[i]]->Surname < TProvisioner::VProvisioners[ipp[j]]->Surname;
+					bSwap = TObjectManager<TProvisioner>::GetList()[ipp[i]]->Surname < TObjectManager<TProvisioner>::GetList()[ipp[j]]->Surname;
 					break;
 				case 1:
-					bSwap = TProvisioner::VProvisioners[ipp[i]]->Name < TProvisioner::VProvisioners[ipp[j]]->Name;
+					bSwap = TObjectManager<TProvisioner>::GetList()[ipp[i]]->Name < TObjectManager<TProvisioner>::GetList()[ipp[j]]->Name;
 					break;
 				case 2:
-					bSwap = TProvisioner::VProvisioners[ipp[i]]->Patronymic < TProvisioner::VProvisioners[ipp[j]]->Patronymic;
+					bSwap = TObjectManager<TProvisioner>::GetList()[ipp[i]]->Patronymic < TObjectManager<TProvisioner>::GetList()[ipp[j]]->Patronymic;
 					break;
 				case 3:
-					bSwap = TProvisioner::VProvisioners[ipp[i]]->Organization < TProvisioner::VProvisioners[ipp[j]]->Organization;
+					bSwap = TObjectManager<TProvisioner>::GetList()[ipp[i]]->Organization < TObjectManager<TProvisioner>::GetList()[ipp[j]]->Organization;
 					break;
 				case 4:
-					bSwap = TProvisioner::VProvisioners[ipp[i]]->Address < TProvisioner::VProvisioners[ipp[j]]->Address;
+					bSwap = TObjectManager<TProvisioner>::GetList()[ipp[i]]->Address < TObjectManager<TProvisioner>::GetList()[ipp[j]]->Address;
 					break;
 				case 5:
-					bSwap = TProvisioner::VProvisioners[ipp[i]]->Phone1 < TProvisioner::VProvisioners[ipp[j]]->Phone1;
+					bSwap = TObjectManager<TProvisioner>::GetList()[ipp[i]]->Phone1 < TObjectManager<TProvisioner>::GetList()[ipp[j]]->Phone1;
 					break;
 				case 6:
-					bSwap = TProvisioner::VProvisioners[ipp[i]]->Phone2 < TProvisioner::VProvisioners[ipp[j]]->Phone2;
+					bSwap = TObjectManager<TProvisioner>::GetList()[ipp[i]]->Phone2 < TObjectManager<TProvisioner>::GetList()[ipp[j]]->Phone2;
 					break;
 				case 7:
-					bSwap = TProvisioner::VProvisioners[ipp[i]]->TotalShoped < TProvisioner::VProvisioners[ipp[j]]->TotalShoped;
+					bSwap = TObjectManager<TProvisioner>::GetList()[ipp[i]]->TotalShoped < TObjectManager<TProvisioner>::GetList()[ipp[j]]->TotalShoped;
 					break;
 				case 8:
-					bSwap = TProvisioner::VProvisioners[ipp[i]]->TotalDiscount < TProvisioner::VProvisioners[ipp[j]]->TotalDiscount;
+					bSwap = TObjectManager<TProvisioner>::GetList()[ipp[i]]->TotalDiscount < TObjectManager<TProvisioner>::GetList()[ipp[j]]->TotalDiscount;
 					break;
 				case 9:
-					bSwap = TProvisioner::VProvisioners[ipp[i]]->TotalDebt < TProvisioner::VProvisioners[ipp[j]]->TotalDebt;
+					bSwap = TObjectManager<TProvisioner>::GetList()[ipp[i]]->TotalDebt < TObjectManager<TProvisioner>::GetList()[ipp[j]]->TotalDebt;
 					break;
 			}
 			if(bArrangeOrder[iIndexColumnData]) {
@@ -161,7 +162,7 @@ void __fastcall TMyListView::ProvisionersKeyDown(TObject *Sender, WORD &Key, int
 //---------------------------------------------------------------------------
 TProvisioner* __fastcall TMyListView::GetSelectProvisioner(void)
 {
-	return TProvisioner::VProvisioners[ipp[ItemIndex]];
+	return TObjectManager<TProvisioner>::GetList()[ipp[ItemIndex]];
 }
 //---------------------------------------------------------------------------
 

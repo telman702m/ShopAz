@@ -6,8 +6,11 @@
 #include "Declaration.h"
 #include "Product.h"
 #include "Price.h"
-#include "MoveProduct.h"
+//#include "MoveProduct.h"
 #include "TBaseData.h"
+#include "ObjectManager.h"
+
+class TMoveProduct;
 
 //---------------------------------------------------------------------------
 class TSelectProduct : public TBaseData
@@ -21,7 +24,7 @@ public:
 	static int CountSelectProdFieldsTableDB;
     static bool GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB);
 
-	static vector <TSelectProduct*> VSelectProduct;
+//	static vector <TSelectProduct*> VSelectProduct;
 
 	static bool __fastcall LoadDataFromFile(char *FileNmae);
 	static bool __fastcall SaveDataToFile(char *FileNmae);

@@ -3,8 +3,8 @@ object FormBuyerList: TFormBuyerList
   Top = 0
   BorderIcons = []
   Caption = #1057#1087#1080#1089#1086#1082' '#1087#1086#1082#1091#1087#1072#1090#1077#1083#1077#1081
-  ClientHeight = 626
-  ClientWidth = 1164
+  ClientHeight = 625
+  ClientWidth = 1160
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

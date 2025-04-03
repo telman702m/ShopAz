@@ -20,7 +20,7 @@ public:
 	static int CountGroupProdFieldsTableDB;
     static bool GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB);
 
-	static vector <TGroupProduct*> VGroupProduct;
+//	static vector <TGroupProduct*> VGroupProduct;
 
 	static void __fastcall LoadFromDB(TMyFDQuery *FDQuery);
 	static TGroupProduct* __fastcall GetGroupProdById(int id);

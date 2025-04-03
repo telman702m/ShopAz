@@ -10,6 +10,7 @@
 #include "UnitGroupProduct.h"
 #include "Price.h"
 #include "TBaseData.h"
+#include "ObjectManager.h"
 
 //---------------------------------------------------------------------------
 class TProduct : public TBaseData
@@ -22,7 +23,7 @@ public:
 	static int CountProductFieldsTableDB;
     static bool GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB);
 
-	static vector <TProduct*> VProduct;
+//	static vector <TProduct*> VProduct;
 
 	static TProduct* __fastcall GetProductById(int id);
 	static bool __fastcall LoadDataFromFile(char *FileNmae);

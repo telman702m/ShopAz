@@ -21,7 +21,7 @@ public:
 	static int CountProvisionerFieldsTableDB;
     static bool GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB);
 
-	static 	vector <TProvisioner*> VProvisioners;
+//	static 	vector <TProvisioner*> VProvisioners;
 	static TProvisioner* Unknow;
 
 	static void __fastcall LoadFromDB(TMyFDQuery *FDQuery, bool bLoadAll);

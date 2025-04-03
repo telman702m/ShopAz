@@ -248,6 +248,10 @@
             <DependentOn>MyListView.h</DependentOn>
             <BuildOrder>17</BuildOrder>
         </CppCompile>
+        <CppCompile Include="ObjectManager.cpp">
+            <DependentOn>ObjectManager.h</DependentOn>
+            <BuildOrder>62</BuildOrder>
+        </CppCompile>
         <CppCompile Include="Person.cpp">
             <DependentOn>Person.h</DependentOn>
             <BuildOrder>19</BuildOrder>

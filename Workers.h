@@ -8,6 +8,7 @@
 #include "Person.h"
 //#include "MyDump.hpp"
 #include "TBaseData.h"
+#include "ObjectManager.h"
 
 //---------------------------------------------------------------------------
 class TWorkers : public TPerson
@@ -21,7 +22,7 @@ public:
     static bool GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB);
 
 	static UnicodeString PrivilegName[5];
-	static 	vector <TWorkers*> VWorkers;
+//	static 	vector <TWorkers*> VWorkers;
 	static TWorkers* __fastcall GetWorkerById(int id);
 	static void __fastcall LoadFromDB(TMyFDQuery *FDQuery);
 

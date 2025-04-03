@@ -7,6 +7,7 @@
 #include "Person.h"
 //#include "MyDump.hpp"
 #include "TBaseData.h"
+#include "ObjectManager.h"
 
 //---------------------------------------------------------------------------
 class TShopUnits : public TPerson
@@ -19,7 +20,7 @@ public:
 	static int CountShopUnitsFieldsTableDB;
     static bool GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB);
 
-	static vector <TShopUnits*> VShopUnits;
+//	static vector <TShopUnits*> VShopUnits;
 	static int *upp;
 	static int CountUnits;
 	static TShopUnits* Buyer;

@@ -6,12 +6,15 @@
 //#include "MyDump.hpp"
 #include "Declaration.h"
 
-#include "SelectProduct.h"
+//#include "SelectProduct.h"
 #include "UnitBuyerData.h"
 #include "UnitProduct.h"
 #include "ShopUnits.h"
 #include "Synchronize.h"
 #include "TBaseData.h"
+#include "ObjectManager.h"
+
+class TSelectProduct;
 
 //---------------------------------------------------------------------------
 class TMoveProduct  : public TBaseData
@@ -23,9 +26,9 @@ public:
 	const static wchar_t *NameTableDB;
 	static TDescFields **MoveFieldsTableDB;
 	static int CountMoveFieldsTableDB;
-    static bool GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB);
+	static bool GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB);
 
-	static vector <TMoveProduct*> VMoveProduct;
+//	static vector <TMoveProduct*> VMoveProduct;
 
 	static void __fastcall LoadFromDB(TMyFDQuery *FDQuery, bool bLoadAll);
 	static bool __fastcall LoadDataFromFile(char *FileNmae);
@@ -97,5 +100,6 @@ public:
 
 	void __fastcall ShowVectorMoveProduct(void);
 };
-
+//---------------------------------------------------------------------------
 #endif
+
