@@ -155,7 +155,7 @@ void __fastcall TFormLogs::FillListLogsData(void)
 				ListItem->ImageIndex = 1;
 			}
 
-			ListItem->SubItems->Add(TShopUnits::VShopUnits[TLogs::VLogsData[i]->IdShopU-1]->Name);
+			ListItem->SubItems->Add(TObjectManager<TShopUnits>::GetList()[TLogs::VLogsData[i]->IdShopU-1]->Name);
 			ListItem->SubItems->Add(TWorkers::PrivilegName[CurWorker->Privilege]);
 			ListItem->SubItems->Add(TLogs::VLogsData[i]->StartDate);
 			if(TLogs::VLogsData[i]->ConnectStatus) {
@@ -204,7 +204,7 @@ void __fastcall TFormLogs::ListViewLogsDataClick(TObject *Sender)
 	TWorkers *CurWorker = TWorkers::GetWorkerById(TLogs::VLogsData[ipp[index]]->IdWorker);
 
 	LabelUser->Caption = CurWorker->SumName;
-	LabelUnitShop->Caption = TShopUnits::VShopUnits[TLogs::VLogsData[ipp[index]]->IdShopU-1]->Name;
+	LabelUnitShop->Caption = TObjectManager<TShopUnits>::GetList()[TLogs::VLogsData[ipp[index]]->IdShopU-1]->Name;
 	LabelDuration->Caption = (TLogs::VLogsData[ipp[index]]->LastAccess - TLogs::VLogsData[ipp[index]]->StartDate).FormatString(L"hh:nn:ss");
 	LabelActions->Caption = TLogs::VLogsData[ipp[index]]->VLogDetails.size();
 	LabelExitStatus->Caption = wExitStatus[TLogs::VLogsData[ipp[index]]->ExitStatus];

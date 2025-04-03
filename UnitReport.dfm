@@ -3,8 +3,8 @@ object FormReport: TFormReport
   Top = 0
   BorderIcons = []
   Caption = #1054#1090#1095#1077#1090
-  ClientHeight = 676
-  ClientWidth = 1278
+  ClientHeight = 675
+  ClientWidth = 1274
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

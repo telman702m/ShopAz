@@ -3,8 +3,8 @@ object FormProvisionerList: TFormProvisionerList
   Top = 0
   BorderIcons = []
   Caption = #1057#1087#1080#1089#1086#1082' '#1087#1086#1089#1090#1072#1074#1097#1080#1082#1086#1074
-  ClientHeight = 615
-  ClientWidth = 1148
+  ClientHeight = 614
+  ClientWidth = 1144
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

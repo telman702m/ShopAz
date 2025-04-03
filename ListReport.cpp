@@ -4,6 +4,7 @@
 #include "MyListView.h"
 #include "UnitReport.h"
 #include "ShopUnits.h"
+#include "SelectProduct.h"
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -15,7 +16,7 @@ void __fastcall TMyListView::FillListReport(void)
 	UnicodeString uTmp;
 
 	TReport::RestoreOrderShopsName();
-	for(unsigned i=0; i < TShopUnits::VShopUnits.size(); i++) {
+	for(unsigned i=0; i < TObjectManager<TShopUnits>::GetList().size(); i++) {
 
 		ListItem = Items->Add();
 		ListItem->Caption = TReport::Reports[i]->NameUnit;

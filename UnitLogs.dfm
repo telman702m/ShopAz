@@ -4,8 +4,8 @@ object FormLogs: TFormLogs
   BorderStyle = bsDialog
   BorderWidth = 1
   Caption = #1052#1086#1085#1080#1090#1086#1088#1080#1085#1075' '#1089#1086#1077#1076#1080#1085#1077#1085#1080#1081
-  ClientHeight = 768
-  ClientWidth = 1365
+  ClientHeight = 767
+  ClientWidth = 1361
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

@@ -7,6 +7,8 @@
 #include "Declaration.h"
 #include "Synchronize.h"
 #include "UnitParent.h"
+#include "ObjectManager.h"
+
 
 typedef struct _TDescFields
 {
@@ -41,7 +43,7 @@ public:
 
 	static bool __fastcall LoadFileToBuffer(char *FileName);
 	static bool __fastcall LoadFileToWBuffer(char *FileName);
-	static int __fastcall GetArrayIndexById(vector <TBaseData*> *VBaseData, int id, bool bInsert = false);
+//	static int __fastcall GetArrayIndexById(vector <TBaseData*> *VBaseData, int id, bool bInsert = false);
 	static TBaseData* __fastcall GetObjectById(vector <TBaseData*> *VBaseData, int id);
 	static void __fastcall TimerSyncRestore(void);
 	static void __fastcall TimerSyncDisable(void);
@@ -58,7 +60,7 @@ public:
 	TabDB TypeTable;
     bool bDeleted;
 
-	int __fastcall GetArrayIndexById(bool bInsert = false);
+//	int __fastcall GetArrayIndexById(bool bInsert = false);
 	TBaseData* __fastcall GetObjectById(void);
 
 //	UnicodeString __fastcall FormationInsertString(wchar_t *TableName, TDescFields **DescFields, UnicodeString DbData[], int CountDbFields);
@@ -67,8 +69,9 @@ public:
 
 	bool __fastcall ExecOnlySQL(TMyFDQuery *FDQuery, UnicodeString &QuerySQL);
 	bool __fastcall LoadRecord(TMyFDQuery *FDQuery, const wchar_t *TableName, TDescFields **DescFields, UnicodeString DbData[], int CountDbFields);
-	bool __fastcall CheckSortById(void);
-	void __fastcall CorrectVector(int index);
+//	bool __fastcall CheckSortById(void);
+//	void __fastcall CorrectVector(int index);
+	void __fastcall CorrectVector(void);
 	virtual bool __fastcall LoadRecordId(TMyFDQuery *FDQuery) = 0;
 
 /*
@@ -86,18 +89,20 @@ public:
 
 	template <class T>
 	void __fastcall ExecSQL_Managed(TMyFDQuery *FDQuery, UnicodeString &QuerySQL,
-	                                const wchar_t *TableName, TabDB TypeTableDB,
-	                                TRecordType RecordType, LOGS Logs);
+									const wchar_t *TableName, TabDB TypeTableDB,
+									TRecordType RecordType, LOGS Logs);
 
 	template <class T>
 	void __fastcall ExecSQL_Managed(TMyFDQuery *FDQuery, TFieldsValues *FieldsValues,
 									   int Count, const wchar_t *TableName,
 									   wchar_t *AutoIncrement, TabDB TypeTableDB);
 
+
+
+
 	template <class T>
 	bool __fastcall ApplyBaseSyncronize_Managed(TMyFDQuery *FDQuery, TSynchronize *SyncData, TFormParent *FormParent);
 
-	void __fastcall CorrectVector(void);
 
 	template <class T>
 	bool __fastcall CheckSortById_Managed(const wchar_t* typeName);

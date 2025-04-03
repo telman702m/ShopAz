@@ -3,8 +3,8 @@ object FormUserStatus: TFormUserStatus
   Top = 0
   BorderStyle = bsDialog
   Caption = #1057#1090#1072#1090#1091#1089' '#1087#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1103
-  ClientHeight = 256
-  ClientWidth = 252
+  ClientHeight = 255
+  ClientWidth = 248
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

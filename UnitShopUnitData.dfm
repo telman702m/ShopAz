@@ -3,8 +3,8 @@ object FormShopUnit: TFormShopUnit
   Top = 0
   BorderStyle = bsDialog
   Caption = #1044#1072#1085#1085#1099#1077' '#1086#1073' '#1086#1073#1098#1077#1082#1090#1077' '#1089#1077#1090#1080' '#1084#1072#1075#1072#1079#1080#1085#1086#1074
-  ClientHeight = 366
-  ClientWidth = 453
+  ClientHeight = 365
+  ClientWidth = 449
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

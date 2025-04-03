@@ -3,7 +3,6 @@
 
 #include <typeinfo>
 
-#include "Shop.h"
 #include "TBaseData.h"
 #include "Synchronize.h"
 #include "TUtills.h"
@@ -12,6 +11,7 @@
 #include "MoveProduct.h"
 #include "Provisioner.h"
 #include "SelectProduct.h"
+#include "Shop.h"
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -267,7 +267,7 @@ bool __fastcall TBaseData::LoadFileToWBuffer(char *FileName)
 }
 
 //---------------------------------------------------------------------------
-int __fastcall TBaseData::GetArrayIndexById(vector <TBaseData*> *VBaseData, int id, bool bInsert)
+/*int __fastcall TBaseData::GetArrayIndexById(vector <TBaseData*> *VBaseData, int id, bool bInsert)
 {
 	unsigned idC, idMin = -1, idMax = VBaseData->size();
 	int fid;
@@ -297,7 +297,7 @@ int __fastcall TBaseData::GetArrayIndexById(vector <TBaseData*> *VBaseData, int 
 	} else {
 		return -1;
 	}
-}
+}*/
 //---------------------------------------------------------------------------
 /*int __fastcall TBaseData::GetArrayIndexById(bool bInsert)
 {
@@ -333,50 +333,6 @@ int __fastcall TBaseData::GetArrayIndexById(vector <TBaseData*> *VBaseData, int 
 	} else {
 		return -1;
 	}
-}
-//---------------------------------------------------------------------------
-TBaseData* __fastcall TBaseData::GetObjectById(void)
-{
-	int index = GetArrayIndexById();
-
-	if(index == -1) {
-		return NULL;
-	} else {
-		return (*VBaseData)[index];
-	}
-}
-//---------------------------------------------------------------------------
-TBaseData* __fastcall TBaseData::GetObjectById(vector <TBaseData*> *VBaseData, int id)
-{
-	int index = GetArrayIndexById(VBaseData, id);
-
-	if(index == -1) {
-		return NULL;
-	} else {
-		return (*VBaseData)[index];
-	}
-}*/
-//---------------------------------------------------------------------------
-/*UnicodeString __fastcall TBaseData::FormationInsertString(wchar_t *TableName, TDescFields **DescFields, UnicodeString DbData[], int CountDbFields)
-{
-	UnicodeString uQuery;
-	uQuery = uQuery.sprintf(L"Insert Into %ls (", TableName);
-
-	for(int i = 1; i < CountDbFields - 3; i++) {
-		uQuery += DescFields[i]->Field;
-		uQuery += uInsert1;
-	}
-	uQuery += DescFields[CountDbFields - 3]->Field;
-	uQuery += L") Values ('";
-
-	for(int i = 1; i < CountDbFields - 3; i++) {
-		uQuery += DbData[i];
-		uQuery += uInsert2;
-	}
-	uQuery += DbData[CountDbFields - 3];
-	uQuery += L"')";
-
-	return uQuery;
 }*/
 //---------------------------------------------------------------------------
 UnicodeString __fastcall TBaseData::FormationUpdateString(const wchar_t *TableName, TFieldsValues *FieldsValues, int Count)
@@ -432,170 +388,6 @@ bool __fastcall TBaseData::ExecOnlySQL(TMyFDQuery *FDQuery, UnicodeString &Query
 
 
 //---------------------------------------------------------------------------
-template <class T>
-void __fastcall TBaseData::ExecSQL_Managed(TMyFDQuery *FDQuery, UnicodeString &QuerySQL, const wchar_t *TableName, TabDB TypeTableDB,
-                                           TRecordType RecordType, LOGS Logs)
-{
-	TimerSyncDisable();
-
-	switch (RecordType) {
-		case TRecordType::RT_INSERT:
-			ShowMessage(L"Insert нельзя использовать через TBaseData");
-			break;
-
-		case TRecordType::RT_UPDATE:
-		{
-			T* found = TObjectManager<T>::FindById(id);
-			if (found)
-				*found = *static_cast<T*>(this);
-			else
-				ShowMessage(L"Не найден объект для обновления по ID");
-			break;
-		}
-
-		case TRecordType::RT_DELETE:
-		{
-			T* found = TObjectManager<T>::FindById(id);
-			if (found)
-				found->bDeleted = true;
-			else
-				ShowMessage(L"Не найден объект для удаления по ID");
-			break;
-		}
-
-		default:
-			break;
-	}
-
-	bool bSuccess = ExecOnlySQL(FDQuery, QuerySQL);
-
-	if (RecordType != TRecordType::RT_UNDEF)
-		TSynchronize::InsertToDb(FDQuery, TypeTableDB, id, RecordType);
-
-	if (Logs != LOGS::LG_UNDEF) {
-		FormShop->CurrentLog->Set(TypeTableDB, Logs, QuerySQL);
-		FormShop->CurrentLog->InsertToDb(FDQuery);
-	}
-
-	TimerSyncRestore();
-}
-
-//---------------------------------------------------------------------------
-/*void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, UnicodeString &QuerySQL, const wchar_t *TableName, TabDB TypeTableDB, TRecordType RecordType, LOGS Logs)
-{
-	vector <TBaseData*> vAliasBaseData = *VBaseData;
-
-	TimerSyncDisable();
-
-//	FDQuery->SQL->Text = QuerySQL;
-//	bool bSuccess = ExecOnlySQL(FDQuery, QuerySQL);
-
-	int idFind;
-
-	switch(RecordType) {
-		case TRecordType::RT_INSERT:
-			ShowMessage(L"Wrond use Insert operation in TbaseData!");
-			break;
-		case TRecordType::RT_UPDATE:
-			idFind = GetArrayIndexById();
-			if(idFind != -1) {
-				(*VBaseData)[idFind] = this;
-			} else {
-				ShowMessage(L"Error!!! Not found id in VBaseData!");
-			}
-			break;
-		case TRecordType::RT_DELETE:
-			idFind = GetArrayIndexById();
-			if(idFind != -1) {
-				(*VBaseData)[idFind]->bDeleted = true;
-			} else {
-				ShowMessage(L"Error!!! Not found id in VBaseData!");
-			}
-			break;
-		default:
-			break;
-	}
-
-	bool bSuccess = ExecOnlySQL(FDQuery, QuerySQL);
-
-	if(RecordType != TRecordType::RT_UNDEF) {
-		TSynchronize::InsertToDb(FDQuery, TypeTableDB, id, RecordType);
-	}
-
-	if(Logs != LOGS::LG_UNDEF) {
-		FormShop->CurrentLog->Set(TypeTableDB, Logs, QuerySQL);
-		FormShop->CurrentLog->InsertToDb(FDQuery);
-	}
-
-	TimerSyncRestore();
-}*/
-
-//---------------------------------------------------------------------------
-template <class T>
-void __fastcall TBaseData::ExecSQL_Managed(TMyFDQuery *FDQuery, TFieldsValues *FieldsValues,
-                                              int Count, const wchar_t *TableName,
-                                              wchar_t *AutoIncrement, TabDB TypeTableDB)
-{
-	TimerSyncDisable();
-
-	bool bSuccess = false;
-	while (!bSuccess) {
-		try {
-			id = FDQuery->MyInsert(TableName, AutoIncrement, FieldsValues, Count);
-
-			// добавляем объект в менеджер
-			TObjectManager<T>::Add(static_cast<T*>(this));
-
-			bSuccess = true;
-
-		} catch (...) {
-			uTmp = uTmp.sprintf(wLostConnection[iLang], wOperationName[TRecordType::RT_INSERT], TableName);
-			if (Application->MessageBox(uTmp.w_str(), uCaptionWarning[iLang], MB_YESNO + MB_ICONQUESTION) == IDNO) {
-				Application->Terminate();
-				exit(1);
-			}
-			bSuccess = false;
-		}
-	}
-
-	TSynchronize::InsertToDb(FDQuery, TypeTableDB, id, TRecordType::RT_INSERT);
-
-	FormShop->CurrentLog->Set(TypeTableDB, LOGS::LG_INSERT, FDQuery->SQL->Text);
-	FormShop->CurrentLog->InsertToDb(FDQuery);
-
-	TimerSyncRestore();
-}
-
-//---------------------------------------------------------------------------
-/*void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, TFieldsValues *FieldsValues, int Count, const wchar_t *TableName, wchar_t *AutoIncrement, TabDB TypeTableDB)
-{
-	TimerSyncDisable();
-
-	bool bSuccess = false;
-	while(!bSuccess) {
-		try {
-			id = FDQuery->MyInsert(TableName, AutoIncrement, FieldsValues, Count);
-			VBaseData->push_back(this);
-
-			bSuccess = true;
-
-	   } catch (...) {
-			uTmp = uTmp.sprintf(wLostConnection[iLang], wOperationName[TRecordType::RT_INSERT], TableName);
-			if(Application->MessageBox(uTmp.w_str(), uCaptionWarning[iLang], MB_YESNO + MB_ICONQUESTION) == IDNO) {
-				Application->Terminate();
-				exit(1);
-			}
-			bSuccess = false;
-	   }
-	}
-
-	TSynchronize::InsertToDb(FDQuery, TypeTableDB, id, TRecordType::RT_INSERT);
-
-	FormShop->CurrentLog->Set(TypeTableDB, LOGS::LG_INSERT, FDQuery->SQL->Text);
-	FormShop->CurrentLog->InsertToDb(FDQuery);
-
-	TimerSyncRestore();
-} */
 //---------------------------------------------------------------------------
 bool __fastcall TBaseData::LoadRecord(TMyFDQuery *FDQuery, const wchar_t *TableName, TDescFields **DescFields, UnicodeString DbData[], int CountDbFields)
 {
@@ -629,113 +421,6 @@ bool __fastcall TBaseData::LoadRecord(TMyFDQuery *FDQuery, const wchar_t *TableN
 	}
 	return true;
 }
-
-//---------------------------------------------------------------------------
-template <class T>
-bool __fastcall TBaseData::ApplyBaseSyncronize_Managed(TMyFDQuery *FDQuery, TSynchronize *SyncData, TFormParent *FormParent)
-{
-	bool bCreateObject = false;
-	id = SyncData->idRecord;
-
-	switch (SyncData->RecordType)
-	{
-		case TRecordType::RT_INSERT:
-		{
-			if (LoadRecordId(FDQuery)) {
-				TObjectManager<T>::Add(static_cast<T*>(this));
-				bCreateObject = true;
-			}
-			break;
-		}
-
-		case TRecordType::RT_UPDATE:
-		{
-			T* existing = TObjectManager<T>::FindById(id);
-			if (existing) {
-				if (LoadRecordId(FDQuery)) {
-					*existing = *static_cast<T*>(this);
-					bCreateObject = true;
-				}
-			}
-			break;
-		}
-
-		case TRecordType::RT_DELETE:
-		{
-			T* existing = TObjectManager<T>::FindById(id);
-			if (existing) {
-				TObjectManager<T>::DeleteAndFree(existing);
-			}
-			break;
-		}
-
-		default:
-			break;
-	}
-
-	// Обновление визуального интерфейса
-	if (FormParent != NULL) {
-		FormParent->bListUpdate = true;
-		if (FormParent->Showing) {
-			FormParent->MyListView->FillList();
-		}
-	}
-
-	return bCreateObject;
-}
-
-//---------------------------------------------------------------------------
-/*bool __fastcall TBaseData::ApplyBaseSyncronize(TMyFDQuery *FDQuery, TSynchronize *SyncData, TFormParent *FormParent)
-{
-	bool bCreateObject = false;
-	int indVec;
-	id = SyncData->idRecord;
-
-	switch(SyncData->RecordType) {
-		case TRecordType::RT_INSERT:
-
-			if(LoadRecordId(FDQuery)) {
-				int InsertIndex = GetArrayIndexById(true);
-				VBaseData->insert(VBaseData->begin()+InsertIndex, this);
-				bCreateObject = true;
-			}
-			break;
-
-		case TRecordType::RT_UPDATE:
-			indVec = GetArrayIndexById();
-
-			if(indVec != -1) {
-				if(LoadRecordId(FDQuery)) {
-					delete (*VBaseData)[indVec];
-					(*VBaseData)[indVec] = this;
-					bCreateObject = true;
-				}
-			}
-			break;
-
-		case TRecordType::RT_DELETE:
-			indVec = GetArrayIndexById();
-
-			if(indVec != -1) {
-				CorrectVector(indVec);
-				delete (*VBaseData)[indVec];
-				VBaseData->erase(VBaseData->begin() + indVec);
-			}
-			break;
-		default:
-            break;
-	}
-
-	if(FormParent != NULL) {
-		FormParent->bListUpdate = true;
-
-		if(FormParent->Showing) {
-			FormParent->MyListView->FillList();
-		}
-	}
-
-	return bCreateObject;
-}*/
 
 //---------------------------------------------------------------------------
 void __fastcall TBaseData::CorrectVector()
@@ -774,95 +459,6 @@ void __fastcall TBaseData::CorrectVector()
 	}
 }
 
-
-//---------------------------------------------------------------------------
-/*void __fastcall TBaseData::CorrectVector(int index)
-{
-	if(dynamic_cast<TBuyer *>(this)) {
-		TypeTable = TabDB::TB_BUYER;
-	} else if(dynamic_cast<TProduct *>(this)) {
-		TypeTable = TabDB::TB_PROD;
-	} else if(dynamic_cast<TProvisioner *>(this)) {
-		TypeTable = TabDB::TB_PROVIS;
-	} else if(dynamic_cast<TSelectProduct *>(this)) {
-		TypeTable = TabDB::TB_SELECTP;
-
-		TSelectProduct *TmpSelectProd = TSelectProduct::VSelectProduct[index];
-		int indexMove = GetArrayIndexById((vector <TBaseData*> *)&TMoveProduct::VMoveProduct, TmpSelectProd->idMove);
-		if(indexMove != -1) {
-			TMoveProduct *TmpMoveProduct = TMoveProduct::VMoveProduct[indexMove];
-			for(unsigned i=0; i < TmpMoveProduct->VSelectedProd.size(); i++) {
-				if(TmpMoveProduct->VSelectedProd[i]->id == id) {
-					TmpMoveProduct->VSelectedProd.erase(TmpMoveProduct->VSelectedProd.begin() + i);
-				}
-			}
-		}
-	} else if(dynamic_cast<TMoveProduct *>(this)) {
-		TypeTable = TabDB::TB_MOVEP;
-	} else {
-		TypeTable = TabDB::TB_UNDEF;
-	}
-} */
-
-//---------------------------------------------------------------------------
-template <class T>
-bool __fastcall TBaseData::CheckSortById_Managed(const wchar_t* typeName)
-{
-	auto& list = TObjectManager<T>::GetList();
-
-	for (size_t i = 1; i < list.size(); ++i)
-	{
-		if (list[i]->id <= list[i - 1]->id)
-		{
-			UnicodeString msg;
-			msg = msg.sprintf(L"Нарушен порядок сортировки для объектов %s", typeName);
-			Application->MessageBox(msg.w_str(), L"Ошибка", MB_OK);
-			return false;
-		}
-	}
-
-	return true;
-}
-
-
-//---------------------------------------------------------------------------
-/*bool __fastcall TBaseData::CheckSortById(void)
-{
-	return true;
-
-	uTmp = L"Unknow object";
-
-	int size = VBaseData->size();
-
-//	const char *TypeName = typeid(this).name();
-
-	if(dynamic_cast<TBuyer *>(this)) {
-		uTmp = L"Buyer";
-	} else if(dynamic_cast<TProduct *>(this)) {
-		uTmp = L"Product";
-	} else if(dynamic_cast<TProvisioner *>(this)) {
-		uTmp = L"Provisioner";
-	} else if(dynamic_cast<TSelectProduct *>(this)) {
-		uTmp = L"SelectProduct";
-	} else if(dynamic_cast<TMoveProduct *>(this)) {
-		uTmp = L"MoveProduct";
-	} else {
-		Application->MessageBox(L"Error on definition type of DataBase when run function CheckSortById", L"Error", MB_OK);
-		return false;
-	}
-
-
-	for(int i = 1; i < size; i++) {
-		if((*VBaseData)[i]->id <= (*VBaseData)[i-1]->id) {
-			UnicodeString uMess;
-			uMess = uMess.sprintf(L"Нарушен порядок сортировки для объектов %s", uTmp.w_str());
-			Application->MessageBox(uMess.w_str(), L"Error", MB_OK);
-			return false;
-		}
-	}
-
-	return true;
-}*/
 //---------------------------------------------------------------------------
 
 

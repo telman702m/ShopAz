@@ -3,8 +3,8 @@ object FormMoveProduct: TFormMoveProduct
   Top = 0
   BorderIcons = []
   Caption = #1055#1088#1086#1076#1072#1078#1072' '#1090#1086#1074#1072#1088#1086#1074
-  ClientHeight = 632
-  ClientWidth = 1164
+  ClientHeight = 631
+  ClientWidth = 1160
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

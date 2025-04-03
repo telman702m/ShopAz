@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <algorithm>
-#include "TBaseData.h"
+//#include "TBaseData.h"
 
 // ”ниверсальный менеджер объектов
 
@@ -29,6 +29,17 @@ public:
 		}
 		return false;
 	}
+
+/*	bool RemoveFromVector(std::vector<T*>& vec, T* obj)
+	{
+		auto it = std::find(vec.begin(), vec.end(), obj);
+		if (it != vec.end()) {
+			vec.erase(it);
+			return true;
+		}
+		return false;
+	}*/
+
 
 	static void DeleteAndFree(T* obj) {
 		if (Delete(obj)) delete obj;

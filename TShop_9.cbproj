@@ -182,6 +182,10 @@
         <BT_BuildType>Debug</BT_BuildType>
     </PropertyGroup>
     <ItemGroup>
+        <CppCompile Include="BaseDataTemplates.cpp">
+            <DependentOn>BaseDataTemplates.h</DependentOn>
+            <BuildOrder>63</BuildOrder>
+        </CppCompile>
         <CppCompile Include="Buyer.cpp">
             <DependentOn>Buyer.h</DependentOn>
             <BuildOrder>3</BuildOrder>

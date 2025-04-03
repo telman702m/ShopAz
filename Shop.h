@@ -2,9 +2,6 @@
 #ifndef ShopH
 #define ShopH
 
-#include "ShopUnits.h"
-#include "Workers.h"
-#include "Logs.h"
 #include <IdHTTP.hpp>
 #include <IdTCPClient.hpp>
 #include <IdTCPConnection.hpp>
@@ -33,7 +30,6 @@
 #include <FireDAC.Phys.IB.hpp>
 #include <FireDAC.Phys.IBBase.hpp>
 #include <FireDAC.Phys.IBWrapper.hpp>
-#include "UnitParentEsc.h"
 #include <System.ImageList.hpp>
 #include <Vcl.ComCtrls.hpp>
 #include <Vcl.Dialogs.hpp>
@@ -41,6 +37,11 @@
 #include <Vcl.ImgList.hpp>
 #include <Vcl.Menus.hpp>
 #include <Vcl.ToolWin.hpp>
+
+#include "ShopUnits.h"
+#include "Workers.h"
+#include "Logs.h"
+#include "UnitParentEsc.h"
 
 
 ///---------------------------------------------------------------------------

@@ -3,8 +3,8 @@ object FormMoveOther: TFormMoveOther
   Top = 0
   BorderStyle = bsDialog
   Caption = #1054#1087#1083#1072#1090#1072' '#1076#1086#1083#1075#1072
-  ClientHeight = 413
-  ClientWidth = 411
+  ClientHeight = 412
+  ClientWidth = 407
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

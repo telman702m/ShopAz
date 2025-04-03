@@ -3,8 +3,8 @@ object FormPrint: TFormPrint
   Top = 0
   BorderStyle = bsDialog
   Caption = 'FormPrint'
-  ClientHeight = 1671
-  ClientWidth = 1195
+  ClientHeight = 1670
+  ClientWidth = 1191
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
