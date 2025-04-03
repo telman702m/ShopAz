@@ -1,3 +1,5 @@
+Win32/
+Debug/
 *.dcu
 *.~*
 *.exe
