@@ -408,21 +408,17 @@ void __fastcall TFormMoveProduct::ButtonSaveClick(TObject *Sender)
 
 	// Delete old VSelect Product from DB
 	TMoveProduct *OldMoveProduct = TObjectManager<TMoveProduct>::GetList()[FormShop->MoveList->ipp[FormShop->MoveList->ItemIndex]];
+
 	for(unsigned i=0; i < OldMoveProduct->VSelectedProd.size(); i++) {
 		OldMoveProduct->VSelectedProd[i]->DeleteObjectFromDb(FormShop->FDQuery1);
 	}
-//	OldMoveProduct->ShowVectorMoveProduct();
-
+	OldMoveProduct->DeleteObjectFromDb(FormShop->FDQuery1);
 	delete OldMoveProduct;
 
-//	OldMoveProduct->ShowVectorMoveProduct();
-
-//	TmpMoveProduct->ShowVectorMoveProduct();
-
-	TmpMoveProduct->SaveAtObjectToDb(FormShop->FDQuery1);
-
-//	TmpMoveProduct->ShowVectorMoveProduct();
-
+	FormShop->SaveMoveProductsToFixedFile();
+//	TmpMoveProduct->SaveAtObjectToDb(FormShop->FDQuery1);
+	TmpMoveProduct->InsertAtObjectToDb(FormShop->FDQuery1);
+	FormShop->SaveMoveProductsToFixedFile();
 
 	// calc Total Price and balance
 	TMoveProduct::CalcUnitsBalance();
@@ -444,6 +440,7 @@ void __fastcall TFormMoveProduct::ButtonSaveClick(TObject *Sender)
 	FormProductList->bListUpdate = true;
 
 	TmpMoveProduct = new TMoveProduct();
+	FormShop->SaveMoveProductsToFixedFile();
 
 	FormShop->MoveList->FillList();
 	FormShop->AtomList->FillList();

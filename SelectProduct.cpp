@@ -8,7 +8,6 @@
 #include "MoveProduct.h"
 #include "TUtills.h"
 #include <time.h>
-//#include "SelectProduct.h"
 #include "BaseDataTemplates.h"
 
 #pragma package(smart_init)
@@ -36,7 +35,6 @@ const double MIN_DATE_TIME = 25570.;    // 1970-01-02 00:00:00
 
 int TSelectProduct::LastIdDb = 0;
 bool TSelectProduct::bLoaded = false;
-//vector <TSelectProduct*> TSelectProduct::VSelectProduct;
 
 const wchar_t *TSelectProduct::NameTableDB;
 TDescFields **TSelectProduct::SelectProdFieldsTableDB = NULL;
@@ -143,7 +141,6 @@ void __fastcall TSelectProduct::InsertAtObjectToDb(TMyFDQuery *FDQuery)
 	};
 	int Count = sizeof(FieldsValues)/sizeof(TFieldsValues);
 
-//	ExecSQL(FDQuery, FieldsValues, Count, NameTableDB, SelectProdFieldsTableDB[0]->Field, TabDB::TB_SELECTP);
 	ExecSQL_Managed<TSelectProduct>(FDQuery, FieldsValues, Count, NameTableDB, SelectProdFieldsTableDB[0]->Field, TabDB::TB_SELECTP);
 }
 //---------------------------------------------------------------------------
@@ -276,7 +273,6 @@ bool __fastcall TSelectProduct::LoadDataFromFile(char *FileName)
 			continue;
 		}
 
-//		int indexMove = GetArrayIndexById((vector <TBaseData*> *)&TMoveProduct::VMoveProduct, TmpSelectProduct->idMove);
 		TMoveProduct* MoveProductTmp = TObjectManager<TMoveProduct>::FindById(TmpSelectProduct->idMove);
 		if(MoveProductTmp != NULL) {
 			TmpSelectProduct->CalcTotalPrice();
@@ -391,32 +387,19 @@ void __fastcall TSelectProduct::LoadFromDB(TMyFDQuery *FDQuery, bool bLoadAll)
 					TObjectManager<TSelectProduct>::GetList().push_back(TmpSelectProduct);
 					bPushed = true;
 				} else {
-//					int iIndex = TmpSelectProduct->GetArrayIndexById();
 
 					if(TmpSelectProduct->bDeleted) {
 						if(TObjectManager<TSelectProduct>::Delete(TmpSelectProduct)) {
 							delete TmpSelectProduct;
 						}
-//						if(iIndex != -1) {
-//							VSelectProduct.erase(VSelectProduct.begin() + iIndex);
-//						}
 					} else {
 						TmpSelectProduct->CalcTotalPrice();
 						TObjectManager<TSelectProduct>::GetList().push_back(TmpSelectProduct);
 						bPushed = true;
-//						if(iIndex == -1) {
-//							TmpSelectProduct->CalcTotalPrice();
-//
-//							int InsertIndex = TmpSelectProduct->GetArrayIndexById(true);
-//							TObjectManager<TSelectProduct>::GetList().insert(TObjectManager<TSelectProduct>::GetList().begin()+InsertIndex, TmpSelectProduct);
-//							bPushed = true;
-//						}
-
 					}
 				}
 
 				if(bPushed) {
-//					int indexMove = GetArrayIndexById((vector <TBaseData*> *)&TMoveProduct::VMoveProduct, TmpSelectProduct->idMove);
 					TMoveProduct* MoveProductTmp = TObjectManager<TMoveProduct>::FindById(TmpSelectProduct->idMove);
 					if(MoveProductTmp != NULL) {
 						if(TmpSelectProduct->bDeleted == MoveProductTmp->bDeleted) {
@@ -495,7 +478,6 @@ bool __fastcall TSelectProduct::LoadRecordId(TMyFDQuery *FDQuery)
 //---------------------------------------------------------------------------
 void __fastcall TSelectProduct::UpdateMoveProduct(void)
 {
-//	int IndexMove = TMoveProduct::GetArrayIndexById((vector <TBaseData*> *)&TMoveProduct::VMoveProduct, idMove);
 	TMoveProduct* MoveProductTmp = TObjectManager<TMoveProduct>::FindById(idMove);
 
 	if(MoveProductTmp != NULL) {
@@ -533,7 +515,6 @@ void __fastcall TSelectProduct::CheckExcessObjects(void)
 	int CountExcess = 0;
 
 	for(int i=0; i < CountSelectProd; i++) {
-//		if(GetArrayIndexById((vector <TBaseData*> *)&TMoveProduct::VMoveProduct, VSelectProduct[i]->idMove) == -1) {
 		if(TObjectManager<TMoveProduct>::FindById(TObjectManager<TSelectProduct>::GetList()[i]->idMove) == NULL) {
 //			ShowMessage(L"Excess SelectProduct object");
 			CountExcess++;

@@ -22,7 +22,6 @@ public:
     static bool GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB);
 
 	static UnicodeString PrivilegName[5];
-//	static 	vector <TWorkers*> VWorkers;
 	static TWorkers* __fastcall GetWorkerById(int id);
 	static void __fastcall LoadFromDB(TMyFDQuery *FDQuery);
 

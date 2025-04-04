@@ -5,7 +5,6 @@
 #include <vector>
 #include "Declaration.h"
 #include "Person.h"
-//#include "MyDump.hpp"
 #include "Price.h"
 #include "Synchronize.h"
 #include "TBaseData.h"
@@ -21,7 +20,6 @@ public:
 	static int CountProvisionerFieldsTableDB;
     static bool GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB);
 
-//	static 	vector <TProvisioner*> VProvisioners;
 	static TProvisioner* Unknow;
 
 	static void __fastcall LoadFromDB(TMyFDQuery *FDQuery, bool bLoadAll);

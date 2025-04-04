@@ -136,7 +136,6 @@ TBuyer* __fastcall TBuyer::GetBuyerById(int id)
 		return Unknow;
 	}
 
-//	return (TBuyer *)TBaseData::GetObjectById((vector <TBaseData*> *)&VBuyers, id);
 	return TObjectManager<TBuyer>::FindById(id);
 }
 //---------------------------------------------------------------------------
@@ -292,21 +291,13 @@ void __fastcall TBuyer::LoadFromDB(TMyFDQuery *FDQuery, bool bLoadAll)
 					TObjectManager<TBuyer>::GetList().push_back(TmpBuyer);
 				} else {
 					iDel = FDQuery->FieldByName(BuyerFieldsTableDB[10]->Field)->AsString.ToInt();
-//					int iIndex = TmpBuyer->GetArrayIndexById();
 
 					if(iDel == 1) {
 						if(TObjectManager<TBuyer>::Delete(TmpBuyer)) {
 							delete TmpBuyer;
 						}
-//						if(iIndex != -1) {
-//							TObjectManager<TBuyer>::GetList().erase(TObjectManager<TBuyer>::GetList().begin() + iIndex);
-//						}
 					} else {
 						TObjectManager<TBuyer>::GetList().push_back(TmpBuyer);
-//						if(iIndex == -1) {
-//							int InsertIndex = TmpBuyer->GetArrayIndexById(true);
-//							TObjectManager<TBuyer>::GetList().insert(TObjectManager<TBuyer>::GetList().begin()+InsertIndex, TmpBuyer);
-//						}
 
 					}
 				}

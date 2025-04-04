@@ -3,10 +3,10 @@
 
 #include <vector>
 #include <algorithm>
-//#include "TBaseData.h"
 
 // ”ниверсальный менеджер объектов
 
+//---------------------------------------------------------------------------
 template <class T>
 class TObjectManager
 {
@@ -62,6 +62,6 @@ public:
 		return GetList().size();
 	}
 };
-
+//---------------------------------------------------------------------------
 #endif
 

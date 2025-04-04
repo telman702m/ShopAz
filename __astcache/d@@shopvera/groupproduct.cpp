@@ -21,8 +21,6 @@ const wchar_t *TGroupProduct::NameTableDB;
 TDescFields **TGroupProduct::GroupProdFieldsTableDB = NULL;
 int TGroupProduct::CountGroupProdFieldsTableDB = 0;
 
-//vector <TGroupProduct*> TGroupProduct::VGroupProduct;
-
 //---------------------------------------------------------------------------
 __fastcall TGroupProduct::TGroupProduct(void) : TBaseData()
 {
@@ -106,7 +104,6 @@ void __fastcall TGroupProduct::DeleteObjectFromDb(TMyFDQuery *FDQuery)
 //---------------------------------------------------------------------------
 TGroupProduct* __fastcall TGroupProduct::GetGroupProdById(int id)
 {
-//	return (TGroupProduct *)TBaseData::GetObjectById((vector <TBaseData*> *)&VGroupProduct, id);
 	return TObjectManager<TGroupProduct>::FindById(id);
 }
 //---------------------------------------------------------------------------

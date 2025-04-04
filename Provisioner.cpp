@@ -133,7 +133,6 @@ TProvisioner* __fastcall TProvisioner::GetProvisionerById(int id)
 //	}
 //	return Unknow;
 
-//	return (TProvisioner *)TBaseData::GetObjectById((vector <TBaseData*> *)&VProvisioners, id);
 	return TObjectManager<TProvisioner>::FindById(id);
 }
 //---------------------------------------------------------------------------
@@ -290,22 +289,13 @@ void __fastcall TProvisioner::LoadFromDB(TMyFDQuery *FDQuery, bool bLoadAll)
 					TObjectManager<TProvisioner>::GetList().push_back(TmpProvisioner);
 				} else {
 					iDel = FDQuery->FieldByName(ProvisionerFieldsTableDB[10]->Field)->AsString.ToInt();
-//					int iIndex = TmpProvisioner->GetArrayIndexById();
 
 					if(iDel == 1) {
 						if(TObjectManager<TProvisioner>::Delete(TmpProvisioner)) {
 							delete TmpProvisioner;
 						}
-//						if(iIndex != -1) {
-//							TObjectManager<TProvisioner>::GetList().erase(TObjectManager<TProvisioner>::GetList().begin() + iIndex);
-//						}
 					} else {
 						TObjectManager<TProvisioner>::GetList().push_back(TmpProvisioner);
-//						if(iIndex == -1) {
-//							int InsertIndex = TmpProvisioner->GetArrayIndexById(true);
-//							TObjectManager<TProvisioner>::GetList().insert(TObjectManager<TProvisioner>::GetList().begin()+InsertIndex, TmpProvisioner);
-//						}
-
 					}
 				}
 

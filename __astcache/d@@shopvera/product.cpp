@@ -157,7 +157,6 @@ void __fastcall TProduct::InsertAtObjectToDb(TMyFDQuery *FDQuery)
 	};
 	int Count = sizeof(FieldsValues)/sizeof(TFieldsValues);
 
-//	ExecSQL(FDQuery, FieldsValues, Count, NameTableDB, ProductFieldsTableDB[0]->Field, TabDB::TB_PROD);
 	ExecSQL_Managed<TProduct>(FDQuery, FieldsValues, Count, NameTableDB, ProductFieldsTableDB[0]->Field, TabDB::TB_PROD);
 //	UnicodeString uQuery = FormationInsertString(NameTableDB, ProductFieldsTableDB, uProductDbData, CountProductFieldsTableDB);
 //	ExecSQL(FDQuery, uQuery, NameTableDB, TabDB::TB_PROD, TRecordType::RT_INSERT, LOGS::LG_INSERT);
@@ -204,14 +203,12 @@ void __fastcall TProduct::SaveAtObjectToDb(TMyFDQuery *FDQuery)
 	int Count = sizeof(FieldsValues)/sizeof(TFieldsValues);
 
 	UnicodeString uQuery = FormationUpdateString(NameTableDB, FieldsValues, Count);
-//	ExecSQL(FDQuery, uQuery, NameTableDB, TabDB::TB_PROD, TRecordType::RT_UPDATE, LOGS::LG_UPDATE);
 	ExecSQL_Managed<TProduct>(FDQuery, uQuery, NameTableDB, TabDB::TB_PROD, TRecordType::RT_UPDATE, LOGS::LG_UPDATE);
 }
 //---------------------------------------------------------------------------
 void __fastcall TProduct::DeleteObjectFromDb(TMyFDQuery *FDQuery)
 {
 	UnicodeString uQuery = FormationDeleteString(NameTableDB, ProductFieldsTableDB[16]->Field);
-//	ExecSQL(FDQuery, uQuery, NameTableDB, TabDB::TB_PROD, TRecordType::RT_DELETE, LOGS::LG_DELETE);
 	ExecSQL_Managed<TProduct>(FDQuery, uQuery, NameTableDB, TabDB::TB_PROD, TRecordType::RT_DELETE, LOGS::LG_DELETE);
 }
 
@@ -408,22 +405,13 @@ void __fastcall TProduct::LoadFromDB(TMyFDQuery *FDQuery, bool bLoadAll)
 					TObjectManager<TProduct>::GetList().push_back(TmpProd);
 				} else {
 					iDel = FDQuery->FieldByName(ProductFieldsTableDB[16]->Field)->AsString.ToInt();
-//					int iIndex = TmpProd->GetArrayIndexById();
 
 					if(iDel == 1) {
 						if(TObjectManager<TProduct>::Delete(TmpProd)) {
 							delete TmpProd;
 						}
-//						if(iIndex != -1) {
-//							TObjectManager<TProduct>::GetList().erase(TObjectManager<TProduct>::GetList().begin() + iIndex);
-//						}
 					} else {
 						TObjectManager<TProduct>::GetList().push_back(TmpProd);
-//						if(iIndex == -1) {
-//							int InsertIndex = TmpProd->GetArrayIndexById(true);
-//							TObjectManager<TProduct>::GetList().insert(TObjectManager<TProduct>::GetList().begin()+InsertIndex, TmpProd);
-//						}
-
 					}
 				}
 

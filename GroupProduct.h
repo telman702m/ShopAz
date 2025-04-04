@@ -4,7 +4,6 @@
 
 #include <vector>
 #include <vector>
-//#include "MyDump.hpp"
 #include "Declaration.h"
 #include "Synchronize.h"
 #include "TBaseData.h"
@@ -19,8 +18,6 @@ public:
 	static TDescFields **GroupProdFieldsTableDB;
 	static int CountGroupProdFieldsTableDB;
     static bool GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB);
-
-//	static vector <TGroupProduct*> VGroupProduct;
 
 	static void __fastcall LoadFromDB(TMyFDQuery *FDQuery);
 	static TGroupProduct* __fastcall GetGroupProdById(int id);

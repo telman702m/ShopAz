@@ -962,8 +962,10 @@ void __fastcall TFormShop::ComboBoxUShopsChange(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TFormShop::ToolButtonMonitoringClick(TObject *Sender)
 {
-	FormLogs->ShowModal();
+//	FormLogs->ShowModal();
 //	PopupMenu1->Popup(100, 100);
+//	ShowMoveProductsInDynamicList(this);
+	SaveMoveProductsToFixedFile();
 }
 //---------------------------------------------------------------------------
 void __fastcall TFormShop::FormKeyPress(TObject *Sender, System::WideChar &Key)
@@ -999,4 +1001,88 @@ void __fastcall TFormShop::ReloadDatabases1Click(TObject *Sender)
 	TProduct::LoadFromDB(FDQuery1, true);
 }
 //---------------------------------------------------------------------------
+//#include <Vcl.ComCtrls.hpp>  // Для TListView
+//#include "MoveProduct.h"
+//#include "ObjectManager.h"
+
+void __fastcall TFormShop::ShowMoveProductsInDynamicList(TComponent* Owner)
+{
+	// Создаём форму динамически
+	TForm* floatingForm = new TForm(Owner);
+	floatingForm->Caption = L"Список перемещений";
+	floatingForm->BorderStyle = bsSizeable;
+	floatingForm->Position = poScreenCenter;
+	floatingForm->Width = 800;
+	floatingForm->Height = 400;
+
+	// Создаём ListView внутри формы
+	TListView* lv = new TListView(floatingForm);
+	lv->Parent = floatingForm;
+	lv->Align = alClient;
+	lv->ViewStyle = vsReport;
+
+	lv->Left = 20;
+	lv->Top = 20;
+	lv->Width = 600;
+	lv->Height = 300;
+
+	// Вид отображения и стили
+	lv->ViewStyle = vsReport;
+	lv->GridLines = true;
+	lv->RowSelect = true;
+	lv->HideSelection = false;
+	lv->FullDrag = true;
+	lv->TabOrder = 0;
+
+	// Добавляем колонки
+	lv->Columns->Add()->Caption = "ID";
+	lv->Columns->Add()->Caption = "Дата/Время";
+	lv->Columns->Add()->Caption = "Оплата";
+	lv->Columns->Add()->Caption = "Описание";
+	lv->Columns->Add()->Caption = "Deleted";
+
+	// Заполняем объектами из менеджера
+	auto& list = TObjectManager<TMoveProduct>::GetList();
+	for (size_t i = 0; i < list.size(); ++i)
+	{
+		TMoveProduct* move = list[i];
+		if (!move) continue;
+
+		TListItem* item = lv->Items->Add();
+		item->Caption = IntToStr(move->id);
+		item->SubItems->Add(move->DateTime.FormatString(L"dd.mm.yyyy hh:nn"));
+		item->SubItems->Add(move->ActualPayment.StringFormat());
+		item->SubItems->Add(move->Description);
+		item->SubItems->Add(IntToStr(move->bDeleted));
+	}
+
+    floatingForm->Show();
+}
+
+
+//---------------------------------------------------------------------------
+void TFormShop::SaveMoveProductsToFixedFile(void)
+{
+	UnicodeString uTmpMove;
+
+	TStrings *Strings = new TStringList();
+
+	// Заполняем объектами из менеджера
+	auto& list = TObjectManager<TMoveProduct>::GetList();
+	for (size_t i = 0; i < list.size(); ++i)
+	{
+		TMoveProduct* move = list[i];
+		if (!move) continue;
+
+		uTmpMove = L"";
+		uTmpMove += IntToStr(move->id) + L"\t";
+		uTmpMove += move->DateTime.FormatString(L"dd.mm.yyyy hh:nn") + L"\t";
+		uTmpMove += move->ActualPayment.StringFormat() + L"\t";
+		uTmpMove += IntToStr(move->bDeleted) + L"\t";
+
+		Strings->Add(uTmpMove);
+	}
+
+	Strings->SaveToFile(L"_MoveProducts.txt");
+}
 

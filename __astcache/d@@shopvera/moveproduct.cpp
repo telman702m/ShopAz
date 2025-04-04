@@ -86,7 +86,6 @@ void __fastcall TMoveProduct::Clear(void)
 __fastcall TMoveProduct::~TMoveProduct(void)
 {
 	DeleteVectorSelectProduct();
-//	ShowVectorMoveProduct();
 }
 //---------------------------------------------------------------------------
 void __fastcall TMoveProduct::DeleteVectorSelectProduct(void)
@@ -201,9 +200,7 @@ void __fastcall TMoveProduct::InsertAtObjectToDb(TMyFDQuery *FDQuery)
 	};
 	int Count = sizeof(FieldsValues)/sizeof(TFieldsValues);
 
-//	ExecSQL(FDQuery, FieldsValues, Count, NameTableDB, MoveFieldsTableDB[0]->Field, TabDB::TB_MOVEP);
 	ExecSQL_Managed<TMoveProduct>(FDQuery, FieldsValues, Count, NameTableDB, MoveFieldsTableDB[0]->Field, TabDB::TB_MOVEP);
-
 
 	for(unsigned i=0; i < VSelectedProd.size(); i++) {
 		VSelectedProd[i]->idMove = id;
@@ -247,14 +244,10 @@ void __fastcall TMoveProduct::SaveAtObjectToDb(TMyFDQuery *FDQuery)
 	UnicodeString uQuery = FormationUpdateString(NameTableDB, FieldsValues, Count);
 	ExecSQL_Managed<TMoveProduct>(FDQuery, uQuery, NameTableDB, TabDB::TB_MOVEP, TRecordType::RT_UPDATE, LOGS::LG_UPDATE);
 
-//	ShowVectorMoveProduct();
-
 	for(unsigned i=0; i < VSelectedProd.size(); i++) {
 		VSelectedProd[i]->idMove = id;
 		VSelectedProd[i]->InsertAtObjectToDb(FDQuery);
 	}
-
-//	ShowVectorMoveProduct();
 }
 
 //---------------------------------------------------------------------------
@@ -524,22 +517,13 @@ void __fastcall TMoveProduct::LoadFromDB(TMyFDQuery *FDQuery, bool bLoadAll)
 				if(bLoadAll) {
 					TObjectManager<TMoveProduct>::GetList().push_back(TmpMoveProduct);
 				} else {
-//					int iIndex = TmpMoveProduct->GetArrayIndexById();
 
 					if(TmpMoveProduct->bDeleted) {
 						if(TObjectManager<TMoveProduct>::Delete(TmpMoveProduct)) {
 							delete TmpMoveProduct;
 						}
-//						if(iIndex != -1) {
-//							VMoveProduct.erase(VMoveProduct.begin() + iIndex);
-//						}
 					} else {
 						TObjectManager<TMoveProduct>::GetList().push_back(TmpMoveProduct);
-//						if(iIndex == -1) {
-//							int InsertIndex = TmpMoveProduct->GetArrayIndexById(true);
-//							TObjectManager<TMoveProduct>::GetList().insert(TObjectManager<TMoveProduct>::GetList().begin()+InsertIndex, TmpMoveProduct);
-//						}
-
 					}
 				}
 
@@ -672,9 +656,7 @@ void __fastcall TMoveProduct::CalcTotalPrice(void)
 //---------------------------------------------------------------------------
 void __fastcall TMoveProduct::CalcUnitsBalance(void)
 {
-//	unsigned CountProduct = TProduct::VProduct.size();
 	unsigned CountProduct = TObjectManager<TProduct>::GetList().size();
-//	unsigned CountShop = TShopUnits::VShopUnits.size();
 	unsigned CountShop = TObjectManager<TShopUnits>::GetList().size();
 
 	for(unsigned i=0; i < CountProduct; i++) {

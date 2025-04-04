@@ -5,7 +5,6 @@
 #include <vector>
 #include "Declaration.h"
 #include "Person.h"
-//#include "MyDump.hpp"
 #include "TBaseData.h"
 #include "ObjectManager.h"
 
@@ -20,7 +19,6 @@ public:
 	static int CountShopUnitsFieldsTableDB;
     static bool GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB);
 
-//	static vector <TShopUnits*> VShopUnits;
 	static int *upp;
 	static int CountUnits;
 	static TShopUnits* Buyer;

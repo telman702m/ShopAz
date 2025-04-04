@@ -42,7 +42,6 @@ void __fastcall TWorkers::Clear(void)
 //---------------------------------------------------------------------------
 TWorkers* __fastcall TWorkers::GetWorkerById(int id)
 {
-//	return (TWorkers *)TBaseData::GetObjectById((vector <TBaseData*> *)&VWorkers, id);
 	return TObjectManager<TWorkers>::FindById(id);
 }
 //---------------------------------------------------------------------------

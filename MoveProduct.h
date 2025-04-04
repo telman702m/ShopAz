@@ -3,7 +3,6 @@
 #define MoveProductH
 
 #include <vector>
-//#include "MyDump.hpp"
 #include "Declaration.h"
 
 //#include "SelectProduct.h"
@@ -28,12 +27,9 @@ public:
 	static int CountMoveFieldsTableDB;
 	static bool GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB);
 
-//	static vector <TMoveProduct*> VMoveProduct;
-
 	static void __fastcall LoadFromDB(TMyFDQuery *FDQuery, bool bLoadAll);
 	static bool __fastcall LoadDataFromFile(char *FileNmae);
 	static bool __fastcall SaveDataToFile(char *FileNmae);
-//	static void ApplySyncronizeMove(TMyFDQuery *FDQuery, TSynchronize *SyncData);
 	static void __fastcall CalcUnitsBalance(void);
 	static void __fastcall CalcDebts(void);
 
@@ -70,10 +66,7 @@ public:
 	TPrice TotalPayment;
 	double dPercent;
 
-//    vector <TBaseData*> vAliasBaseData;
-
 	vector <TSelectProduct*> VSelectedProd;
-
 
 	// Metods
 	__fastcall TMoveProduct(void);

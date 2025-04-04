@@ -227,6 +227,10 @@ public:		// User declarations
 	bool bDebtForm;
 
 	TLogs *CurrentLog;
+
+	void __fastcall ShowMoveProductsInDynamicList(TComponent* Owner);
+	void SaveMoveProductsToFixedFile(void);
+
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TFormShop *FormShop;

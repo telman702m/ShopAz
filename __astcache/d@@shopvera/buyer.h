@@ -21,7 +21,6 @@ public:
 	static int CountBuyerFieldsTableDB;
     static bool GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB);
 
-//	static vector <TBuyer*> VBuyers;
 	static TBuyer* Unknow;
 	static TBuyer* Empty;
 

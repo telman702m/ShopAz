@@ -3,7 +3,6 @@
 #define ProductH
 
 #include <vector>
-//#include "MyDump.hpp"
 #include "Declaration.h"
 
 #include "GroupProduct.h"
@@ -22,8 +21,6 @@ public:
 	static TDescFields **ProductFieldsTableDB;
 	static int CountProductFieldsTableDB;
     static bool GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB);
-
-//	static vector <TProduct*> VProduct;
 
 	static TProduct* __fastcall GetProductById(int id);
 	static bool __fastcall LoadDataFromFile(char *FileNmae);
