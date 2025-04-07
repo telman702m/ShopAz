@@ -67,8 +67,6 @@ public:
 	TPrice TotalPayment;
 	double dPercent;
 
-//    vector <TBaseData*> vAliasBaseData;
-
 	vector <TSelectProduct*> VSelectedProd;
 
 

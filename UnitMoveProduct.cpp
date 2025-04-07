@@ -411,20 +411,16 @@ void __fastcall TFormMoveProduct::ButtonSaveClick(TObject *Sender)
 	for(unsigned i=0; i < OldMoveProduct->VSelectedProd.size(); i++) {
 		OldMoveProduct->VSelectedProd[i]->DeleteObjectFromDb(FormShop->FDQuery1);
 	}
-//	OldMoveProduct->ShowVectorMoveProduct();
-
-	vector <TBaseData*> vAliasBaseData = *(OldMoveProduct->VBaseData);
-	vector <TBaseData*> vAliasBaseData2 = *(TmpMoveProduct->VBaseData);
-/**/
+	OldMoveProduct->ShowVectorMoveProduct();
 	delete OldMoveProduct;
 
-//	OldMoveProduct->ShowVectorMoveProduct();
+	OldMoveProduct->ShowVectorMoveProduct();
 
-//	TmpMoveProduct->ShowVectorMoveProduct();
+	TmpMoveProduct->ShowVectorMoveProduct();
 
 	TmpMoveProduct->SaveAtObjectToDb(FormShop->FDQuery1);
-
-//	TmpMoveProduct->ShowVectorMoveProduct();
+//	TMoveProduct::VMoveProduct.push_back(TmpMoveProduct);
+	TmpMoveProduct->ShowVectorMoveProduct();
 
 
 	// calc Total Price and balance

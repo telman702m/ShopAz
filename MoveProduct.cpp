@@ -64,23 +64,8 @@ int TMoveProduct::CountMoveFieldsTableDB = 0;
 //---------------------------------------------------------------------------
 __fastcall TMoveProduct::TMoveProduct(void) : TBaseData()
 {
-/*	VBaseData = new vector<TBaseData*>;
-
-	for (size_t i = 0; i < VMoveProduct.size(); ++i) {
-		TMoveProduct *pMoveProduct = VMoveProduct[i];
-		vAliasBaseData.push_back(pMoveProduct);
-	}
-	VBaseData = &vAliasBaseData;
-
-
-	for (auto ptr : VMoveProduct)
-		VBaseData->push_back(static_cast<TBaseData*>(ptr));
-*/
-
 	VBaseData = (vector <TBaseData*> *)&VMoveProduct;
 	Clear();
-
-//	vAliasBaseData = *((vector <TBaseData*>*)&VMoveProduct);
 }
 //---------------------------------------------------------------------------
 bool TMoveProduct::GetFieldsDB(TMyFDQuery *FDQuery, const wchar_t *_NameTableDB)

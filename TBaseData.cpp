@@ -304,8 +304,6 @@ int __fastcall TBaseData::GetArrayIndexById(vector <TBaseData*> *VBaseData, int 
 //---------------------------------------------------------------------------
 int __fastcall TBaseData::GetArrayIndexById(bool bInsert)
 {
-	vector <TBaseData*> vAliasBaseData = *VBaseData;
-
 	unsigned idC, idMin = -1, idMax = VBaseData->size();
 	int fid;
 
@@ -415,62 +413,13 @@ UnicodeString __fastcall TBaseData::FormationDeleteString(const wchar_t *TableNa
 	return uQuery;
 }
 //---------------------------------------------------------------------------
-bool __fastcall TBaseData::ExecOnlySQL(TMyFDQuery *FDQuery, UnicodeString &QuerySQL)
+void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, UnicodeString QuerySQL, const wchar_t *TableName, TabDB TypeTableDB, TRecordType RecordType, LOGS Logs)
 {
-	FDQuery->SQL->Text = QuerySQL;
-
-	while(true) {
-		try {
-			FDQuery->Execute();
-			return true;
-
-	   } catch (...) {
-			if(Application->MessageBox(L"Error on ExecOnlySQL\n Retry?", uCaptionWarning[iLang], MB_YESNO + MB_ICONQUESTION) == IDNO) {
-				Application->Terminate();
-				exit(1);
-			}
-	   }
-	}
-}
-//---------------------------------------------------------------------------
-void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, UnicodeString &QuerySQL, const wchar_t *TableName, TabDB TypeTableDB, TRecordType RecordType, LOGS Logs)
-{
-	vector <TBaseData*> vAliasBaseData = *VBaseData;
-
 	TimerSyncDisable();
 
-//	FDQuery->SQL->Text = QuerySQL;
-//	bool bSuccess = ExecOnlySQL(FDQuery, QuerySQL);
+	FDQuery->SQL->Text = QuerySQL;
 
-	int idFind;
-
-	switch(RecordType) {
-		case TRecordType::RT_INSERT:
-			ShowMessage(L"Wrond use Insert operation in TbaseData!");
-			break;
-		case TRecordType::RT_UPDATE:
-			idFind = GetArrayIndexById();
-			if(idFind != -1) {
-				(*VBaseData)[idFind] = this;
-			} else {
-				ShowMessage(L"Error!!! Not found id in VBaseData!");
-			}
-			break;
-		case TRecordType::RT_DELETE:
-			idFind = GetArrayIndexById();
-			if(idFind != -1) {
-				(*VBaseData)[idFind]->bDeleted = true;
-			} else {
-				ShowMessage(L"Error!!! Not found id in VBaseData!");
-			}
-			break;
-		default:
-			break;
-	}
-
-	bool bSuccess = ExecOnlySQL(FDQuery, QuerySQL);
-
-/*	bool bSuccess = false;
+	bool bSuccess = false;
 	while(!bSuccess) {
 		try {
 			FDQuery->Execute();
@@ -478,7 +427,7 @@ void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, UnicodeString &QuerySQL,
 
 			switch(RecordType) {
 				case TRecordType::RT_INSERT:
-					ShowMessage(L"Wrond use Insert operation in TbaseData!");
+                    ShowMessage(L"Wrond use Insert operation in TbaseData!");
 //					id = FDQuery->InsertId;
 //					VBaseData->push_back(this);
 					break;
@@ -487,7 +436,7 @@ void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, UnicodeString &QuerySQL,
 					if(idFind != -1) {
 						(*VBaseData)[idFind] = this;
 					} else {
-						// error
+                    	// error
 					}
 					break;
 				case TRecordType::RT_DELETE:
@@ -496,11 +445,11 @@ void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, UnicodeString &QuerySQL,
 //						VBaseData->erase(VBaseData->begin() + idFind);
 						(*VBaseData)[idFind]->bDeleted = true;
 					} else {
-						// error
+                    	// error
 					}
 					break;
 				default:
-					break;
+                    break;
 			}
 
 			bSuccess = true;
@@ -513,7 +462,7 @@ void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, UnicodeString &QuerySQL,
 			}
 			bSuccess = false;
 	   }
-	}*/
+	}
 	if(RecordType != TRecordType::RT_UNDEF) {
 		TSynchronize::InsertToDb(FDQuery, TypeTableDB, id, RecordType);
 	}
@@ -672,8 +621,6 @@ void __fastcall TBaseData::CorrectVector(int index)
 //---------------------------------------------------------------------------
 bool __fastcall TBaseData::CheckSortById(void)
 {
-	return true;
-
 	UnicodeString uTmp = L"Unknow object";
 
 	int size = VBaseData->size();

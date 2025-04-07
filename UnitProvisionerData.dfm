@@ -2,8 +2,8 @@ object FormProvisionerData: TFormProvisionerData
   Left = 0
   Top = 0
   Caption = 'FormProvisionerData'
-  ClientHeight = 403
-  ClientWidth = 452
+  ClientHeight = 404
+  ClientWidth = 456
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

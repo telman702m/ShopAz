@@ -4,8 +4,8 @@ object FormBuyerData: TFormBuyerData
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = #1044#1072#1085#1085#1099#1077' '#1086' '#1087#1086#1082#1091#1087#1072#1090#1077#1083#1077
-  ClientHeight = 402
-  ClientWidth = 451
+  ClientHeight = 403
+  ClientWidth = 455
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

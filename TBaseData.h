@@ -62,8 +62,7 @@ public:
 	UnicodeString __fastcall FormationUpdateString(const wchar_t *TableName, TFieldsValues *FieldsValues, int Count);
 	UnicodeString __fastcall FormationDeleteString(const wchar_t *TableName, wchar_t *DbField);
 
-	bool __fastcall ExecOnlySQL(TMyFDQuery *FDQuery, UnicodeString &QuerySQL);
-	void __fastcall ExecSQL(TMyFDQuery *FDQuery, UnicodeString &QuerySQL, const wchar_t *TableName, TabDB TypeTableDB, TRecordType RecordType, LOGS Logs);
+	void __fastcall ExecSQL(TMyFDQuery *FDQuery, UnicodeString QuerySQL, const wchar_t *TableName, TabDB TypeTableDB, TRecordType RecordType, LOGS Logs);
 	void __fastcall ExecSQL(TMyFDQuery *FDQuery, TFieldsValues *FieldsValues, int Count, const wchar_t *TableName, wchar_t *AutoIncrement, TabDB TypeTableDB);
 
 	bool __fastcall LoadRecord(TMyFDQuery *FDQuery, const wchar_t *TableName, TDescFields **DescFields, UnicodeString DbData[], int CountDbFields);
