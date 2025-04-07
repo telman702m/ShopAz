@@ -223,6 +223,7 @@ void __fastcall TMoveProduct::SaveAtObjectToDb(TMyFDQuery *FDQuery)
 		ActualPayment.GetMoney(),
 		ActualPayment.GetCent(),
 		Description,
+		bDeleted
 	};
 
 	TFieldsValues FieldsValues[] = {
@@ -236,7 +237,8 @@ void __fastcall TMoveProduct::SaveAtObjectToDb(TMyFDQuery *FDQuery)
 		{MoveFieldsTableDB[8]->Field, 	uMoveDbData[8].w_str()},
 		{MoveFieldsTableDB[9]->Field, 	uMoveDbData[9].w_str()},
 		{MoveFieldsTableDB[10]->Field, 	uMoveDbData[10].w_str()},
-		{MoveFieldsTableDB[11]->Field, 	uMoveDbData[11].w_str()}
+		{MoveFieldsTableDB[11]->Field, 	uMoveDbData[11].w_str()},
+		{MoveFieldsTableDB[12]->Field, 	L"0"}
 	};
 	int Count = sizeof(FieldsValues)/sizeof(TFieldsValues);
 

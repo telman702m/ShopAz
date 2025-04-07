@@ -370,13 +370,13 @@ UnicodeString __fastcall TBaseData::FormationDeleteString(const wchar_t *TableNa
 //---------------------------------------------------------------------------
 bool __fastcall TBaseData::ExecOnlySQL(TMyFDQuery *FDQuery, UnicodeString &QuerySQL)
 {
-	FormShop->SaveMoveProductsToFixedFile();
+//	FormShop->SaveMoveProductsToFixedFile();
 	FDQuery->SQL->Text = QuerySQL;
 
 	while(true) {
 		try {
 			FDQuery->Execute();
-			FormShop->SaveMoveProductsToFixedFile();
+//			FormShop->SaveMoveProductsToFixedFile();
 			return true;
 
 	   } catch (...) {
@@ -386,7 +386,7 @@ bool __fastcall TBaseData::ExecOnlySQL(TMyFDQuery *FDQuery, UnicodeString &Query
 			}
 	   }
 	}
-	FormShop->SaveMoveProductsToFixedFile();
+//	FormShop->SaveMoveProductsToFixedFile();
 }
 
 

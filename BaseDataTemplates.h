@@ -25,9 +25,9 @@ void __fastcall TBaseData::ExecSQL_Managed(TMyFDQuery *FDQuery, UnicodeString &Q
 		{
 			T* found = TObjectManager<T>::FindById(id);
 			if (found) {
-				FormShop->SaveMoveProductsToFixedFile();
+//				FormShop->SaveMoveProductsToFixedFile();
 				*found = *static_cast<T*>(this);
-				FormShop->SaveMoveProductsToFixedFile();
+//				FormShop->SaveMoveProductsToFixedFile();
 			} else {
 				ShowMessage(L"Не найден объект для обновления по ID");
 			}
@@ -38,8 +38,8 @@ void __fastcall TBaseData::ExecSQL_Managed(TMyFDQuery *FDQuery, UnicodeString &Q
 		{
 			T* found = TObjectManager<T>::FindById(id);
 			if (found) {
-//				found->bDeleted = true;
-				TObjectManager<T>::Delete(found);
+				found->bDeleted = true;
+//				TObjectManager<T>::Delete(found);
 			}
 			else
 				ShowMessage(L"Не найден объект для удаления по ID");
@@ -51,21 +51,21 @@ void __fastcall TBaseData::ExecSQL_Managed(TMyFDQuery *FDQuery, UnicodeString &Q
 	}
 
 	bool bSuccess = ExecOnlySQL(FDQuery, QuerySQL);
-	FormShop->SaveMoveProductsToFixedFile();
+//	FormShop->SaveMoveProductsToFixedFile();
 
 	if (RecordType != TRecordType::RT_UNDEF) {
 		TSynchronize::InsertToDb(FDQuery, TypeTableDB, id, RecordType);
-		FormShop->SaveMoveProductsToFixedFile();
+//		FormShop->SaveMoveProductsToFixedFile();
 	}
 
 	if (Logs != LOGS::LG_UNDEF) {
 		FormShop->CurrentLog->Set(TypeTableDB, Logs, QuerySQL);
 		FormShop->CurrentLog->InsertToDb(FDQuery);
-		FormShop->SaveMoveProductsToFixedFile();
+//		FormShop->SaveMoveProductsToFixedFile();
 	}
 
 	TimerSyncRestore();
-	FormShop->SaveMoveProductsToFixedFile();
+//	FormShop->SaveMoveProductsToFixedFile();
 }
 
 //---------------------------------------------------------------------------

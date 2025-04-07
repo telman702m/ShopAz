@@ -962,10 +962,10 @@ void __fastcall TFormShop::ComboBoxUShopsChange(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TFormShop::ToolButtonMonitoringClick(TObject *Sender)
 {
-//	FormLogs->ShowModal();
+	FormLogs->ShowModal();
 //	PopupMenu1->Popup(100, 100);
 //	ShowMoveProductsInDynamicList(this);
-	SaveMoveProductsToFixedFile();
+//	SaveMoveProductsToFixedFile();
 }
 //---------------------------------------------------------------------------
 void __fastcall TFormShop::FormKeyPress(TObject *Sender, System::WideChar &Key)
