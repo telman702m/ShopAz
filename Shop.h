@@ -226,6 +226,9 @@ public:		// User declarations
 	bool bDebtForm;
 
 	TLogs *CurrentLog;
+
+//	void SaveMoveProductsToFixedFile(void);
+//	void SaveSelectProductsToFixedFile(void);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TFormShop *FormShop;

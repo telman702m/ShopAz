@@ -998,4 +998,57 @@ void __fastcall TFormShop::ReloadDatabases1Click(TObject *Sender)
 	TProduct::LoadFromDB(FDQuery1, true);
 }
 //---------------------------------------------------------------------------
+/*void TFormShop::SaveMoveProductsToFixedFile(void)
+{
+	UnicodeString uTmpMove;
+
+	TStrings *Strings = new TStringList();
+
+	// Заполняем объектами из менеджера
+	auto& list = TMoveProduct::VMoveProduct;
+	for (size_t i = 0; i < list.size(); ++i)
+	{
+		TMoveProduct* move = list[i];
+		if (!move) continue;
+
+		uTmpMove = L"";
+		uTmpMove += IntToStr(move->id) + L"\t";
+		uTmpMove += move->DateTime.FormatString(L"dd.mm.yyyy hh:nn") + L"\t";
+		uTmpMove += move->ActualPayment.StringFormat() + L"\t";
+		uTmpMove += IntToStr(move->bDeleted) + L"\t";
+
+		Strings->Add(uTmpMove);
+	}
+
+	Strings->SaveToFile(L"_MoveProducts.txt");
+}
+//---------------------------------------------------------------------------
+void TFormShop::SaveSelectProductsToFixedFile(void)
+{
+	UnicodeString uTmpSelect;
+
+	TStrings *Strings = new TStringList();
+
+	// Заполняем объектами из менеджера
+	auto &list = TSelectProduct::VSelectProduct;
+	for (size_t i = 0; i < list.size(); ++i)
+	{
+		TSelectProduct* sel = list[i];
+		if (!sel) continue;
+
+		uTmpSelect = L"";
+		uTmpSelect += IntToStr(sel->id) + L"\t";
+		uTmpSelect += IntToStr(sel->idMove) + L"\t";
+		uTmpSelect += sel->SelectDateTime.FormatString(L"dd.mm.yyyy hh:nn") + L"\t";
+		uTmpSelect += IntToStr(sel->idProduct) + L"\t";
+		uTmpSelect += sel->Price.StringFormat() + L"\t";
+		uTmpSelect += sel->Count.StringFormat() + L"\t";
+		uTmpSelect += IntToStr(sel->bDeleted) + L"\t";
+
+		Strings->Add(uTmpSelect);
+	}
+
+	Strings->SaveToFile(L"_SelectProducts.txt");
+}*/
+//---------------------------------------------------------------------------
 

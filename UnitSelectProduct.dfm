@@ -3,8 +3,8 @@ object FormSelectProd: TFormSelectProd
   Top = 0
   BorderStyle = bsDialog
   Caption = #1042#1099#1073#1086#1088' '#1090#1086#1074#1072#1088#1072
-  ClientHeight = 385
-  ClientWidth = 359
+  ClientHeight = 387
+  ClientWidth = 367
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

@@ -2,6 +2,7 @@
 #pragma hdrstop
 
 #include <typeinfo>
+#include <algorithm>
 
 #include "Shop.h"
 #include "TBaseData.h"
@@ -436,7 +437,7 @@ void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, UnicodeString QuerySQL, 
 					if(idFind != -1) {
 						(*VBaseData)[idFind] = this;
 					} else {
-                    	// error
+						ShowMessage(L"not found idFind = GetArrayIndexById()");
 					}
 					break;
 				case TRecordType::RT_DELETE:
@@ -445,7 +446,7 @@ void __fastcall TBaseData::ExecSQL(TMyFDQuery *FDQuery, UnicodeString QuerySQL, 
 //						VBaseData->erase(VBaseData->begin() + idFind);
 						(*VBaseData)[idFind]->bDeleted = true;
 					} else {
-                    	// error
+                    	ShowMessage(L"not found idFind = GetArrayIndexById()");
 					}
 					break;
 				default:
@@ -625,6 +626,7 @@ bool __fastcall TBaseData::CheckSortById(void)
 
 	int size = VBaseData->size();
 
+
 //	const char *TypeName = typeid(this).name();
 
 	if(dynamic_cast<TBuyer *>(this)) {
@@ -642,6 +644,7 @@ bool __fastcall TBaseData::CheckSortById(void)
 		return false;
 	}
 
+	std::sort(VBaseData->begin(), VBaseData->end(), [](TBaseData *a, TBaseData *b) {return a->id < b->id;});
 
 	for(int i = 1; i < size; i++) {
 		if((*VBaseData)[i]->id <= (*VBaseData)[i-1]->id) {

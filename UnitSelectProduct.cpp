@@ -340,7 +340,9 @@ void __fastcall TFormSelectProd::ButtonSaveClick(TObject *Sender)
 		return;
 	}
 
+//	FormShop->SaveSelectProductsToFixedFile();
 	SaveAtFormToObject(TmpSelectProd);
+//	FormShop->SaveSelectProductsToFixedFile();
 
 	int IndexV = FormMoveProduct->TmpMoveProduct->GetIndexInVSelectById(TmpSelectProd->id);
 
@@ -348,12 +350,15 @@ void __fastcall TFormSelectProd::ButtonSaveClick(TObject *Sender)
 		FormMoveProduct->TmpMoveProduct->CorrectUnitsBalance(IndexV, iMult);
 	}
 	int IndexAtomList = FormMoveProduct->MyListView->ipp[FormMoveProduct->MyListView->ItemIndex];
+//	FormShop->SaveSelectProductsToFixedFile();
 	*(FormMoveProduct->TmpMoveProduct->VSelectedProd[IndexAtomList]) = *TmpSelectProd;
+//	FormShop->SaveSelectProductsToFixedFile();
 
 	if(IndexV != -1) {
 		FormMoveProduct->TmpMoveProduct->CorrectUnitsBalance(IndexV, -iMult);
 	}
 
+//	FormShop->SaveSelectProductsToFixedFile();
 	bButtonAddCall = true;
 	Close();
 }

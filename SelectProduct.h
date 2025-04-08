@@ -6,8 +6,9 @@
 #include "Declaration.h"
 #include "Product.h"
 #include "Price.h"
-#include "MoveProduct.h"
 #include "TBaseData.h"
+
+class TMoveProduct;
 
 //---------------------------------------------------------------------------
 class TSelectProduct : public TBaseData
@@ -48,6 +49,7 @@ public:
 	// Constructor
 	__fastcall TSelectProduct(void);
 	__fastcall TSelectProduct(const TSelectProduct &SelectProduct);
+	__fastcall ~TSelectProduct(void);
 	const TSelectProduct& __fastcall operator=(const TSelectProduct &SelectProduct);
 	void __fastcall Clear(void);
 	void __fastcall CalcTotalPrice(void);

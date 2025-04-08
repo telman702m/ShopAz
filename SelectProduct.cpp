@@ -5,6 +5,7 @@
 #include "Shop.h"
 #include "Synchronize.h"
 #include "UnitProgressBar.h"
+#include "MoveProduct.h"
 #include "TUtills.h"
 #include <time.h>
 
@@ -31,22 +32,6 @@ UnicodeString ProgressLoadSP[2] = {
 
 const double MIN_DATE_TIME = 25570.;    // 1970-01-02 00:00:00
 
-/*const int CountFieldsSelectProduct = 12;
-wchar_t *SelectProdDbFields[CountFieldsSelectProduct][2] =
-	{{L"id",              L" Int(11) Not Null Auto_increment, "},    // id
-	 {L"idMoveProduct",	  L" Int(11) DEFAULT NULL, "},                            // id on Sale
-	 {L"DateTime",        L" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, "}, // Time of selected product
-	 {L"idProduct",	      L" Int(11) DEFAULT NULL, "},                      		 // idProduct
-	 {L"IncomingPrice1",  L" Int(8) DEFAULT '0', "},                      		 // Incoming Price product (Money)
-	 {L"IncomingPrice2",  L" Int(2) DEFAULT '0', "},                      		 // Incoming Price product (Cent)
-	 {L"Price1",		  L" Int(8) DEFAULT '0', "},                      		 // Price product (Money)
-	 {L"Price2",		  L" Int(2) DEFAULT '0', "},                      		 // Price product (Cent)
-	 {L"Count1",   		  L" Int(8) DEFAULT '0', "},                      		 // Count Products1
-	 {L"Count2",   		  L" Int(6) DEFAULT '0', "},                             // Count Products2
-	 {L"Deleted",		  L" Smallint(1) "},
-	 {L"LastUpdate",	  L" TIMESTAMP CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, "}
-	};*/
-
 int TSelectProduct::LastIdDb = 0;
 bool TSelectProduct::bLoaded = false;
 vector <TSelectProduct*> TSelectProduct::VSelectProduct;
@@ -60,6 +45,11 @@ __fastcall TSelectProduct::TSelectProduct(void) : TBaseData()
 {
 	VBaseData = (vector <TBaseData*> *)&VSelectProduct;
 	Clear();
+}
+//---------------------------------------------------------------------------
+__fastcall TSelectProduct::~TSelectProduct(void)
+{
+//
 }
 
 //---------------------------------------------------------------------------
@@ -235,7 +225,6 @@ bool __fastcall TSelectProduct::LoadDataFromFile(char *FileName)
 	}
 
 	UnicodeString uTmp;
-//	int counter = 0, CountDelete = 0, CountDelete2 = 0;
 	int CountParseFields = CountSelectProdFieldsTableDB - 1;
 
 	while(Offset < FileSize) {
@@ -285,7 +274,6 @@ bool __fastcall TSelectProduct::LoadDataFromFile(char *FileName)
 			if(Application->MessageBox(uLostProduct[iLang], uCaptionWarning[iLang], MB_YESNO + MB_ICONQUESTION) == idYes) {
 				TmpSelectProduct->DeleteObjectFromDb(FormShop->FDQuery1);
 			}
-//			CountDelete++;
 			continue;
 		}
 
@@ -298,18 +286,15 @@ bool __fastcall TSelectProduct::LoadDataFromFile(char *FileName)
 				TMoveProduct::VMoveProduct[indexMove]->VSelectedProd.push_back(TmpSelectProduct);
 				TMoveProduct::VMoveProduct[indexMove]->CalcTotalPrice();
 			}
-		} else {
+/*		} else {
 			// delete this record from DB
 			if(Application->MessageBox(uLostSelectProduct[iLang], uCaptionWarning[iLang], MB_YESNO + MB_ICONQUESTION) == idYes) {
 				TmpSelectProduct->DeleteObjectFromDb(FormShop->FDQuery1);
 			} else {
 				TmpSelectProduct->CalcTotalPrice();
 				VSelectProduct.push_back(TmpSelectProduct);
-			}
-//			CountDelete2++;
+			} */
 		}
-
-//		counter++;
 	}
 
 	delete FileBuffer;

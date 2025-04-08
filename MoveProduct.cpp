@@ -36,24 +36,6 @@ const wchar_t *LostProduct[2] = {
 
 const double MIN_DATE_TIME = 25570.;    // 1970-01-02 00:00:00
 
-/*const int CountFieldsMoveProduct = 14;
-wchar_t *MoveProductDbFields[CountFieldsMoveProduct][2] =
-	{{L"id",              L" Int(11) Not Null Auto_increment, "},
-	 {L"TypeOperation",   L" Smallint(1), "},                         // Discount Money
-	 {L"idSource",        L" Int(11), "},                             // Discount Money
-	 {L"idSourcePerson",  L" Int(11), "},                             // Discount Money
-	 {L"idTarget",        L" Int(11), "},                             // Discount Money
-	 {L"idTargetPerson",  L" Int(11), "},                             // Discount Money
-	 {L"DateTime",        L" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, "}, // Sale Time
-	 {L"Discount1",       L" Int(8), "},                             // Discount Money
-	 {L"Discount2",       L" Int(2), "},                             // Discount Cent
-	 {L"ActualPayment1",  L" Int(8), "},                             // ActualPayment Money
-	 {L"ActualPayment2",  L" Int(2), "},                             // ActualPayment Cent
-	 {L"Description",     L" Varchar(368), "},                       // Description
-	 {L"Deleted",		  L" Smallint(1) "},
-	 {L"LastUpdate",	  L" TIMESTAMP CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, "}
-	}; */
-
 vector <TMoveProduct*> TMoveProduct::VMoveProduct;
 int TMoveProduct::LastIdDb = 0;
 
@@ -103,7 +85,6 @@ void __fastcall TMoveProduct::Clear(void)
 __fastcall TMoveProduct::~TMoveProduct(void)
 {
 	DeleteVectorSelectProduct();
-//	ShowVectorMoveProduct();
 }
 //---------------------------------------------------------------------------
 void __fastcall TMoveProduct::DeleteVectorSelectProduct(void)
@@ -242,6 +223,7 @@ void __fastcall TMoveProduct::SaveAtObjectToDb(TMyFDQuery *FDQuery)
 		ActualPayment.GetMoney(),
 		ActualPayment.GetCent(),
 		Description,
+		bDeleted
 	};
 
 	TFieldsValues FieldsValues[] = {
@@ -255,7 +237,8 @@ void __fastcall TMoveProduct::SaveAtObjectToDb(TMyFDQuery *FDQuery)
 		{MoveFieldsTableDB[8]->Field, 	uMoveDbData[8].w_str()},
 		{MoveFieldsTableDB[9]->Field, 	uMoveDbData[9].w_str()},
 		{MoveFieldsTableDB[10]->Field, 	uMoveDbData[10].w_str()},
-		{MoveFieldsTableDB[11]->Field, 	uMoveDbData[11].w_str()}
+		{MoveFieldsTableDB[11]->Field, 	uMoveDbData[11].w_str()},
+		{MoveFieldsTableDB[12]->Field, 	0}
 	};
 	int Count = sizeof(FieldsValues)/sizeof(TFieldsValues);
 
@@ -263,14 +246,11 @@ void __fastcall TMoveProduct::SaveAtObjectToDb(TMyFDQuery *FDQuery)
 	UnicodeString uQuery = FormationUpdateString(NameTableDB, FieldsValues, Count);
 	ExecSQL(FDQuery, uQuery, NameTableDB, TabDB::TB_MOVEP, TRecordType::RT_UPDATE, LOGS::LG_UPDATE);
 
-//	ShowVectorMoveProduct();
-
 	for(unsigned i=0; i < VSelectedProd.size(); i++) {
 		VSelectedProd[i]->idMove = id;
 		VSelectedProd[i]->InsertAtObjectToDb(FDQuery);
 	}
 
-//	ShowVectorMoveProduct();
 }
 
 //---------------------------------------------------------------------------

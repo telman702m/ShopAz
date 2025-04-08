@@ -240,13 +240,11 @@ void __fastcall TFormMoveProduct::FormShow(TObject *Sender)
 	switch(FormShop->ButtonOperat) {
 		case TButtonAction::BA_VIEW:
 			*TmpMoveProduct = *(TMoveProduct::VMoveProduct[FormShop->MoveList->ipp[FormShop->MoveList->ItemIndex]]);
-//			TmpMoveProduct = TMoveProduct::VMoveProduct[FormShop->MoveList->ipp[FormShop->MoveList->ItemIndex]];
 			ButtonSubmit->OnClick = NULL;
 			TimerDate->Enabled = false;
 			break;
 		case TButtonAction::BA_EDIT:
 			*TmpMoveProduct = *(TMoveProduct::VMoveProduct[FormShop->MoveList->ipp[FormShop->MoveList->ItemIndex]]);
-//			TmpMoveProduct->MoveType = TMoveType::MOV_SALE;
 			ButtonSubmit->OnClick = ButtonSaveClick;
 			TimerDate->Enabled = false;
 			break;
@@ -406,22 +404,26 @@ void __fastcall TFormMoveProduct::ButtonSaveClick(TObject *Sender)
 
 	ButtonSubmit->Enabled = false;
 
+//	FormShop->SaveMoveProductsToFixedFile();
+
 	// Delete old VSelect Product from DB
 	TMoveProduct *OldMoveProduct = TMoveProduct::VMoveProduct[FormShop->MoveList->ipp[FormShop->MoveList->ItemIndex]];
 	for(unsigned i=0; i < OldMoveProduct->VSelectedProd.size(); i++) {
 		OldMoveProduct->VSelectedProd[i]->DeleteObjectFromDb(FormShop->FDQuery1);
 	}
-	OldMoveProduct->ShowVectorMoveProduct();
-	delete OldMoveProduct;
+	OldMoveProduct->DeleteObjectFromDb(FormShop->FDQuery1);
 
-	OldMoveProduct->ShowVectorMoveProduct();
-
-	TmpMoveProduct->ShowVectorMoveProduct();
+//	FormShop->SaveMoveProductsToFixedFile();
+//	FormShop->SaveSelectProductsToFixedFile();
 
 	TmpMoveProduct->SaveAtObjectToDb(FormShop->FDQuery1);
-//	TMoveProduct::VMoveProduct.push_back(TmpMoveProduct);
-	TmpMoveProduct->ShowVectorMoveProduct();
 
+//	FormShop->SaveMoveProductsToFixedFile();
+//	FormShop->SaveSelectProductsToFixedFile();
+
+//	delete OldMoveProduct;
+//	FormShop->SaveMoveProductsToFixedFile();
+//	FormShop->SaveSelectProductsToFixedFile();
 
 	// calc Total Price and balance
 	TMoveProduct::CalcUnitsBalance();
@@ -443,6 +445,8 @@ void __fastcall TFormMoveProduct::ButtonSaveClick(TObject *Sender)
 	FormProductList->bListUpdate = true;
 
 	TmpMoveProduct = new TMoveProduct();
+//	FormShop->SaveMoveProductsToFixedFile();
+//	FormShop->SaveSelectProductsToFixedFile();
 
 	FormShop->MoveList->FillList();
 	FormShop->AtomList->FillList();
